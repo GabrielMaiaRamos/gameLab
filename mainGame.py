@@ -8,13 +8,25 @@ janela = Window(largura, altura)
 
 
 #=====[Sprites]=====
-player = Sprite("C:\\Users\\Computador\\Documents\\GitHub\\gameLab\\spirtes\\00-final-product.png")
-player.set_position(largura/2, altura/2)
+player = Sprite("sprites\\player.png")
+player.set_position(largura/2 + 200, altura/2)
 
-salao_jantar = Sprite("C:\\Users\\Computador\\Documents\\GitHub\\gameLab\spirtes\\fundo_salao_jantar.png")
+salao_jantar = Sprite("sprites\\fundo_salao_jantar.png")
 
-mesa_jantar = Sprite("spirtes\mesa_jantar.png")
-mesa_jantar.set_position(largura/2, altura/2)
+quadro = Sprite("sprites\\quadro.png")
+quadro.set_position(250, 30)
+
+lareira = Sprite("sprites\\lareira.png")
+lareira.set_position(0, 0)
+
+armario = Sprite("sprites\\armario.png")
+armario.set_position(1080, 200)
+
+mesa_jantar = Sprite("sprites\\mesa_jantar.png")
+mesa_jantar.set_position(largura/2 - 100, altura/2)
+
+tv = Sprite("sprites\\tv.png")
+tv.set_position(950, 30)
 #=====[LOOP]=====
 while True:
 
@@ -25,5 +37,9 @@ while True:
     #=====[upadte]=====
     salao_jantar.draw()
     mesa_jantar.draw()
+    quadro.draw()
+    armario.draw()
+    lareira.draw()
+    tv.draw()
     player.draw()
     janela.update()
