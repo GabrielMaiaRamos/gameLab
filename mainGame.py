@@ -15,7 +15,7 @@ player.set_position(largura/2 + 200, altura/2)
 hitbox_player = Sprite("sprites\\hitbox_player.png")
 hitbox_player.set_position(largura/2 + 208, altura/2 + 135)
 
-#=====[sala de jantar]=====
+#=====[Sala de Jantar]=====
 salao_jantar = Sprite("sprites\\fundo_salao_jantar.png")
 
 quadro = Sprite("sprites\\quadro.png")
@@ -54,6 +54,9 @@ objetos_jantar = [lareira, armario, mesa_jantar, carrinho]
 from playerMoviment import Movimentacao
 move_player = Movimentacao(player, hitbox_player, janela)
 
+from teclado_letras import Palavra
+palavra = ""
+
 #=====[função desenho]=====
 def desenho_jantar():
     #===abaixo do player
@@ -72,16 +75,22 @@ def desenho_jantar():
     #===layer do player===
     player.draw()
     #===acima do player
+palavra_1 = Palavra(janela)
 
 #=====[LOOP]=====
 while True:
-    move_player.moviment(objetos_jantar)
+    
     match fase:
         case "menu":
             fase = "jantar"
             pass
         case "jantar":
+            move_player.moviment(objetos_jantar)
             desenho_jantar()
+            # palavra_1.input_letra()
+            
+            
+
             #=====[upadte]=====
 
     janela.update()
