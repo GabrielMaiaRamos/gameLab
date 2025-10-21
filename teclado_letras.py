@@ -9,11 +9,11 @@ class Palavra():
 
         self.palavra = ""
         self.janela = janela
-        self.timer = 0
+        self.timer = -0.15
 
     def input_letra(self):
         self.timer += self.janela.delta_time()
-
+        
         if self.timer >= 0.15:
             if Window.keyboard.key_pressed("a"):
                 self.letra = "a"
@@ -106,5 +106,4 @@ class Palavra():
         else:
             self.palavra += self.letra
 
-
-        self.janela.draw_text(self.palavra, 10, 10 ,50)
+        self.janela.draw_text(self.palavra, 470, 400 , 30)

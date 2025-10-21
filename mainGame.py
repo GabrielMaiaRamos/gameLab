@@ -1,54 +1,19 @@
 from pplay.window import *
 from pplay.sprite import *
 
-
 #=====[JANELA]=====
 largura = 1280
 altura = 720
 janela = Window(largura, altura)
 #comeco da parede em -> y = 160
 fase = "menu"
+
 #=====[Sprites]=====
 player = Sprite("sprites\\player.png")
 player.set_position(largura/2 + 200, altura/2)
 
 hitbox_player = Sprite("sprites\\hitbox_player.png")
 hitbox_player.set_position(largura/2 + 208, altura/2 + 135)
-
-#=====[Sala de Jantar]=====
-salao_jantar = Sprite("sprites\\fundo_salao_jantar.png")
-
-quadro = Sprite("sprites\\quadro.png")
-quadro.set_position(250, 30)
-
-lareira = Sprite("sprites\\lareira.png")
-lareira.set_position(0, 0)
-
-armario = Sprite("sprites\\armario.png")
-armario.set_position(1143, 75)
-
-mesa_jantar = Sprite("sprites\\mesa_jantar.png")
-mesa_jantar.set_position(largura/2 - 100, altura/2)
-
-bussula = Sprite("sprites\\bussula.png")
-bussula.set_position(560, 375)
-
-tv = Sprite("sprites\\tv.png")
-tv.set_position(800, 30)
-
-porta = Sprite("sprites\\porta.png")
-porta.set_position(540, 20)
-
-carrinho = Sprite("sprites\\carrinho.png")
-carrinho.set_position(1050, 500)
-
-retrato = Sprite("sprites\\retrato.png")
-retrato.set_position(160, 320)
-
-copo = Sprite("sprites\\copo.png")
-copo.set_position(1125, 505)
-
-objetos_jantar = [lareira, armario, mesa_jantar, carrinho]
 
 #=====[Modularização]=====
 from playerMoviment import Movimentacao
@@ -57,37 +22,23 @@ move_player = Movimentacao(player, hitbox_player, janela)
 from teclado_letras import Palavra
 palavra = ""
 
-#=====[função desenho]=====
-def desenho_jantar():
-    #===abaixo do player
-    salao_jantar.draw()
-    quadro.draw()
-    armario.draw()
-    lareira.draw()
-    retrato.draw()
-    tv.draw()
-    porta.draw()
-    mesa_jantar.draw()
-    bussula.draw()
-    hitbox_player.draw()
-    carrinho.draw()
-    copo.draw()
-    #===layer do player===
-    player.draw()
-    #===acima do player
-palavra_1 = Palavra(janela)
+from salaJantar import Jantar
+sala1 = Jantar(janela, player)
 
 #=====[LOOP]=====
 while True:
-    
     match fase:
         case "menu":
             fase = "jantar"
             pass
         case "jantar":
-            move_player.moviment(objetos_jantar)
-            desenho_jantar()
-            # palavra_1.input_letra()
+            sala1.desenho_jantar()
+            if not sala1.interativo:
+                move_player.moviment(sala1.objetos_jantar)
+            player.draw()
+            sala1.colisoes()
+            
+            
             
             
 
