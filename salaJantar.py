@@ -4,7 +4,7 @@ from teclado_letras import Palavra
 
 fundo_pop = Sprite("sprites\\fundo_pop.png")
 
-#=====[Sala de Jantar]=====
+#=====[SPRITES]=====
 salao_jantar = Sprite("sprites\\fundo_salao_jantar.png")
 
 quadro = Sprite("sprites\\quadro.png")
@@ -40,34 +40,37 @@ retrato.set_position(160, 320)
 copo = Sprite("sprites\\copo.png")
 copo.set_position(1125, 505)
 
-objetos_jantar = [lareira, armario, mesa_jantar, carrinho]
-
 class Jantar():
     def __init__(self, janela, player):
-        self.objetos_jantar = objetos_jantar
+        self.objetos_jantar = [lareira, armario, mesa_jantar, carrinho]
         self.player = player
         self.janela = janela
         self.interativo = False
-        self.palavra_1 = Palavra(self.janela)
+        #inicializa o input do player
+        self.palpite = Palavra(self.janela)
+        #lista de respostas corretas
         self.corretas = ["radar", "ordem", "morde", "dorme", "poder", "podre", "depor"]
         self.acertos = 0
 
     def colisoes(self):
+        #se apertar "e" enquanto esta proximo da tv, abre um sprite de "tela da tv"
         if Window.keyboard.key_pressed("e") and self.player.collided(tv):
             self.interativo = True
         
         if self.interativo:
             fundo_pop.draw()
             tv_tela.draw()
-            self.palavra_1.input_letra()
+            self.palpite.input_letra()
 
+            #se der enter, verifica se a palavra formada esta na lista de corretas
             if Window.keyboard.key_pressed("enter"):
-                if self.palavra_1.palavra in self.corretas:
+                #se estiver na lista de corretas, entao inicializa um loop para retirar as palavras correspondentes
+                if self.palpite.palavra in self.corretas:
                     for i in range(len(self.corretas)):
                         remover = 0
-                        if self.palavra_1.palavra == "radar":
+                        if self.palpite.palavra == "radar":
                             remover = 1
-                        elif self.palavra_1.palavra in ["ordem", "morde", "dorme"]:
+                        elif self.palpite.palavra in ["ordem", "morde", "dorme"]:
                             remover = 2
                         else:
                             remover = 3
@@ -83,16 +86,16 @@ class Jantar():
                         self.corretas.remove("podre")
                         self.corretas.remove("depor")
                     self.acertos += 1
-                self.palavra_1.palavra = ""
-                print(self.acertos)
-                print(self.corretas)
-            
+                #reinicia o palpite para uma string vazia
+                self.palpite.palavra = ""
+            #se apertar esc, fecha o sprite "tela da tv" e retorna à sala de jantar
             if Window.keyboard.key_pressed("esc"):
                 self.interativo = False
-                self.palavra_1 = Palavra(self.janela)
+                #reinicia o objeto palpite
+                self.palpite = Palavra(self.janela)
         
     def desenho_jantar(self):
-        #===abaixo do player
+        #===abaixo do player===
         salao_jantar.draw()
         quadro.draw()
         armario.draw()

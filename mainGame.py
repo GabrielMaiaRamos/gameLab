@@ -19,9 +19,6 @@ hitbox_player.set_position(largura/2 + 208, altura/2 + 135)
 from playerMoviment import Movimentacao
 move_player = Movimentacao(player, hitbox_player, janela)
 
-from teclado_letras import Palavra
-palavra = ""
-
 from salaJantar import Jantar
 sala1 = Jantar(janela, player)
 

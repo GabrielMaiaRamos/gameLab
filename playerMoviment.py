@@ -11,15 +11,18 @@ class Movimentacao():
 
 
     def verify_colision(self, lista_objetos):
+        #se a hitbox do player colidir com qualquer objeto da lista, retorna True
         for objeto in lista_objetos:
             if self.hitbox.collided(objeto):
                 return True
         return False
-                    
 
+    #verificacoes simples e diretas de movimento
     def moviment(self, lista_objetos):
         if (Window.keyboard.key_pressed("w") or Window.keyboard.key_pressed("UP")) and (self.hitbox.y > 170):
             self.hitbox.y -= self.speed * self.janela.delta_time()
+            #para todas as direcoes: se verificar colisao com um objeto naquela direcao, faz a operacao inversa na posicao do y
+            #assim, y do player continua = 0, sem se movimentar
             if self.verify_colision(lista_objetos):
                 self.hitbox.y += self.speed * self.janela.delta_time()
 
@@ -38,6 +41,6 @@ class Movimentacao():
             if self.verify_colision(lista_objetos):
                 self.hitbox.x += self.speed * self.janela.delta_time()
 
-
+        #posicao do player é igual o da hitbox com pequenas alteracoes de acordo com o sprite
         self.player.x = self.hitbox.x - 8
         self.player.y = self.hitbox.y - 135
