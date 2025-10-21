@@ -25,7 +25,7 @@ lareira = Sprite("sprites\\lareira.png")
 lareira.set_position(0, 0)
 
 armario = Sprite("sprites\\armario.png")
-armario.set_position(1080, 75)
+armario.set_position(1143, 75)
 
 mesa_jantar = Sprite("sprites\\mesa_jantar.png")
 mesa_jantar.set_position(largura/2 - 100, altura/2)
