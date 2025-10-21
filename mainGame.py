@@ -43,44 +43,45 @@ carrinho = Sprite("sprites\\carrinho.png")
 carrinho.set_position(1050, 500)
 
 retrato = Sprite("sprites\\retrato.png")
-retrato.set_position(300, 300)
+retrato.set_position(160, 320)
 
-objetos_jantar = [lareira, armario, mesa_jantar]
+copo = Sprite("sprites\\copo.png")
+copo.set_position(1125, 505)
+
+objetos_jantar = [lareira, armario, mesa_jantar, carrinho]
 
 #=====[Modularização]=====
 from playerMoviment import Movimentacao
 move_player = Movimentacao(player, hitbox_player, janela)
 
+#=====[função desenho]=====
+def desenho_jantar():
+    #===abaixo do player
+    salao_jantar.draw()
+    quadro.draw()
+    armario.draw()
+    lareira.draw()
+    retrato.draw()
+    tv.draw()
+    porta.draw()
+    mesa_jantar.draw()
+    bussula.draw()
+    hitbox_player.draw()
+    carrinho.draw()
+    copo.draw()
+    #===layer do player===
+    player.draw()
+    #===acima do player
+
 #=====[LOOP]=====
 while True:
-    #print(player.x, janela.height, player.x+100)
     move_player.moviment(objetos_jantar)
     match fase:
         case "menu":
             fase = "jantar"
             pass
         case "jantar":
-    #=====[draws]=====
-
-            print(player.x, janela.height, player.x+100)
-            move_player.moviment(objetos_jantar)
-
-            #===abaixo do player===
-            salao_jantar.draw()
-            quadro.draw()
-            armario.draw()
-            lareira.draw()
-            retrato.draw()
-            tv.draw()
-            porta.draw()
-            mesa_jantar.draw()
-            bussula.draw()
-            #===layer do player===
-            player.draw()
-            #===acima do player
-            carrinho.draw()
-
-            hitbox_player.draw()
+            desenho_jantar()
             #=====[upadte]=====
 
     janela.update()
