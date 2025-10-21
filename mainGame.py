@@ -34,12 +34,15 @@ carrinho.set_position(1050, 500)
 retrato = Sprite("sprites\\retrato.png")
 retrato.set_position(300, 300)
 
+objetos_jantar = [lareira, armario, tv, mesa_jantar]
+
 #=====[Modularização]=====
 from playerMoviment import Movimentacao
 move_player = Movimentacao(player, janela)
 
 #=====[LOOP]=====
 while True:
+<<<<<<< Updated upstream
     #print(player.x, janela.height, player.x+100)
     move_player.moviment()
     match fase:
@@ -48,6 +51,11 @@ while True:
             pass
         case "jantar":
             #=====[draws]=====
+=======
+    print(player.x, janela.height, player.x+100)
+    move_player.moviment(objetos_jantar)
+
+>>>>>>> Stashed changes
 
             #===abaixo do player===
             salao_jantar.draw()
