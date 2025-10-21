@@ -32,7 +32,9 @@ porta.set_position(540, 20)
 carrinho = Sprite("sprites\\carrinho.png")
 carrinho.set_position(1050, 500)
 retrato = Sprite("sprites\\retrato.png")
-retrato.set_position(300, 300)
+retrato.set_position(160, 320)
+copo = Sprite("sprites\\copo.png")
+copo.set_position(1125, 505)
 
 objetos_jantar = [lareira, armario, tv, mesa_jantar]
 
@@ -42,20 +44,15 @@ move_player = Movimentacao(player, janela)
 
 #=====[LOOP]=====
 while True:
-<<<<<<< Updated upstream
+
     #print(player.x, janela.height, player.x+100)
-    move_player.moviment()
+    move_player.moviment(objetos_jantar)
     match fase:
         case "menu":
             fase = "jantar"
             pass
         case "jantar":
             #=====[draws]=====
-=======
-    print(player.x, janela.height, player.x+100)
-    move_player.moviment(objetos_jantar)
-
->>>>>>> Stashed changes
 
             #===abaixo do player===
             salao_jantar.draw()
@@ -69,6 +66,7 @@ while True:
             player.draw()
             #===acima do player
             carrinho.draw()
+            copo.draw()
             mesa_jantar.draw()
             bussula.draw()
 

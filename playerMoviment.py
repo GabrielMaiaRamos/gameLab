@@ -8,11 +8,6 @@ class Movimentacao():
         self.player = player
         self.janela = janela
 
-<<<<<<< Updated upstream
-    def moviment(self):
-        if (Window.keyboard.key_pressed("w") or Window.keyboard.key_pressed("UP")) and (self.player.y + 130 > 160):
-            self.player.y -= self.speedUP * self.janela.delta_time()
-=======
     def verify_colision(self, lista_objetos):
         for objeto in lista_objetos:
             if self.player.collided(objeto):
@@ -21,12 +16,11 @@ class Movimentacao():
                     
 
     def moviment(self, lista_objetos):
-        if (Window.keyboard.key_pressed("w") or Window.keyboard.key_pressed("UP")) and (self.player.y+100 > 190):
+        if (Window.keyboard.key_pressed("w") or Window.keyboard.key_pressed("UP")) and (self.player.y + 130 > 160):
             self.player.y -= self.speed * self.janela.delta_time()
             if self.verify_colision(lista_objetos):
                 self.player.y += self.speed * self.janela.delta_time()
-
->>>>>>> Stashed changes
+    
         if (Window.keyboard.key_pressed("s") or Window.keyboard.key_pressed("DOWN")) and (self.player.y+100 < self.janela.height):
             self.player.y += self.speed * self.janela.delta_time()
             if self.verify_colision(lista_objetos):
