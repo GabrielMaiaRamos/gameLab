@@ -12,7 +12,7 @@ class Movimentacao():
         self.janela = janela
 
     def moviment(self):
-        if (Window.keyboard.key_pressed("w") or Window.keyboard.key_pressed("UP")) and (self.player.y+100 > 190):
+        if (Window.keyboard.key_pressed("w") or Window.keyboard.key_pressed("UP")) and (self.player.y + 130 > 160):
             self.player.y -= self.speedUP * self.janela.delta_time()
         if (Window.keyboard.key_pressed("s") or Window.keyboard.key_pressed("DOWN")) and (self.player.y+100 < self.janela.height):
             self.player.y += self.speedDOWN * self.janela.delta_time()
