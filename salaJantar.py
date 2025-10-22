@@ -28,6 +28,17 @@ tv.set_position(800, 30)
 tv_tela = Sprite("sprites\\tv_popup.png")
 tv_tela.set_position(290, 140)
 
+circulo_1 = Sprite("sprites\\circulo_apagado.png")
+circulo_1.set_position(580, 320)
+
+circulo_2 = Sprite("sprites\\circulo_apagado.png")
+circulo_2.set_position(610, 320)
+
+circulo_3 = Sprite("sprites\\circulo_apagado.png")
+circulo_3.set_position(640, 320)
+
+circulos = [circulo_1, circulo_2, circulo_3]
+
 porta = Sprite("sprites\\porta.png")
 porta.set_position(540, 20)
 
@@ -60,32 +71,33 @@ class Jantar():
         if self.interativo:
             fundo_pop.draw()
             tv_tela.draw()
+            #desenha a lista de 3 circulos
+            for c in range(len(circulos)):
+                circulos[c].draw()
             self.palpite.input_letra()
 
             #se der enter, verifica se a palavra formada esta na lista de corretas
             if Window.keyboard.key_pressed("enter"):
                 #se estiver na lista de corretas, entao inicializa um loop para retirar as palavras correspondentes
                 if self.palpite.palavra in self.corretas:
-                    for i in range(len(self.corretas)):
-                        remover = 0
-                        if self.palpite.palavra == "radar":
-                            remover = 1
-                        elif self.palpite.palavra in ["ordem", "morde", "dorme"]:
-                            remover = 2
-                        else:
-                            remover = 3
-                        break
-                    if remover == 1:
+                    if self.palpite.palavra == "radar":
                         self.corretas.remove("radar")
-                    if remover == 2:
+
+                    elif self.palpite.palavra in ["ordem", "morde", "dorme"]:
                         self.corretas.remove("ordem")
                         self.corretas.remove("morde")
                         self.corretas.remove("dorme")
-                    if remover == 3:
+
+                    elif self.palpite.palavra in ["poder", "podre", "depor"]:
                         self.corretas.remove("poder")
                         self.corretas.remove("podre")
                         self.corretas.remove("depor")
                     self.acertos += 1
+
+                    #muda o sprite de um circulo ao acertar
+                    circulos[self.acertos-1] = Sprite("sprites\\circulo_aceso.png")
+                    circulos[self.acertos-1].set_position(580 + ((self.acertos-1)*30), 320)
+                    
                 #reinicia o palpite para uma string vazia
                 self.palpite.palavra = ""
             #se apertar esc, fecha o sprite "tela da tv" e retorna à sala de jantar
