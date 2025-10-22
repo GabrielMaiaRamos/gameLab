@@ -20,14 +20,14 @@ hitbox_player = Sprite("sprites\\hitbox_player.png")
 hitbox_player.set_position(largura/2 + 208, altura/2 + 135)
 
 #=====[Modularização]=====
-from playerMoviment import Movimentacao
+from playerScripts.playerMoviment import Movimentacao
 move_player = Movimentacao(player, hitbox_player, janela)
 
-from salaJantar import Jantar
+from rooms.salaJantar import Jantar
 sala1 = Jantar(janela, player)
 
-from minigames import gameAlavanca
-
+from minigames.gameAlavanca import Alavanca
+alavanca1 = Alavanca(janela, (640, 360))
 
 #=====[LOOP]=====
 while True:
@@ -41,7 +41,7 @@ while True:
                 move_player.moviment(sala1.objetos_jantar)
             player.draw()
             sala1.colisoes()
-
+            alavanca1.circunferencia()
             #=====[upadte]=====
 
     janela.update()

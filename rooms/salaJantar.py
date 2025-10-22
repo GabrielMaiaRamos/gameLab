@@ -1,6 +1,6 @@
 from pplay.window import *
 from pplay.sprite import *
-from teclado_letras import Palavra
+from minigames.teclado_letras import Palavra
 
 fundo_pop = Sprite("sprites\\fundo_pop.png")
 
