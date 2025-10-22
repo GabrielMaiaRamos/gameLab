@@ -4,8 +4,10 @@ from math import cos, sin
 
 fundo_pop = Sprite("sprites\\fundo_pop.png")
 
-circulo = Sprite("sprites\\circulo_apagado.png")
+circulo = Sprite("sprites\\roda_alavanca.png")
 circulo.set_position(580, 320)
+
+aro = Sprite("sprites\\aro_alavanca.png")
 
 
 
