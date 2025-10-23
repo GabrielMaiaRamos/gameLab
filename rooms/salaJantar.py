@@ -2,7 +2,7 @@ from pplay.window import *
 from pplay.sprite import *
 from minigames.teclado_letras import Palavra
 from minigames.gameAlavanca import Alavanca
-from time import sleep
+from minigames.gameMemoria import Memoria
 
 fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
@@ -60,7 +60,10 @@ class Jantar():
         self.player = player
         self.janela = janela
         
-        
+        #inicializa o minigame da memoria
+        self.minigame_memoria = False
+        self.memoria = Memoria(self.janela)
+
         #inicializa o minigame da alavanca
         self.alavanca = Alavanca(self.janela)
         self.minigame_alavanca = False
@@ -123,7 +126,7 @@ class Jantar():
         # essa mecanica vai mudar para quando o jogador clicar em cima da alavanca
         if Window.keyboard.key_pressed("e") and self.player.collided(lareira):
             self.acionei = True
-        
+
         # aqui inicia o jogo da alavanca
         if self.acionei:
             lareira_pop.draw()
@@ -155,7 +158,17 @@ class Jantar():
                 self.acertos_alavanca = 0
                 self.minigame_alavanca = False
                 self.alavanca = Alavanca(self.janela)
+
+        if Window.keyboard.key_pressed("e") and self.player.collided(armario):
+            self.minigame_memoria = True
+        
+        if self.minigame_memoria:
             
+            self.memoria.mostrar_obejtos()
+
+            if Window.keyboard.key_pressed("esc"):
+                self.minigame_memoria = False
+
     def desenho_jantar(self):
         #===abaixo do player===
         salao_jantar.draw()
