@@ -4,9 +4,8 @@ from minigames.teclado_letras import Palavra
 from minigames.gameAlavanca import Alavanca
 from minigames.gameMemoria import Memoria
 
-fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
-
 #=====[SPRITES]=====
+fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 salao_jantar = Sprite("assets\\sprites\\fundo_salao_jantar.png")
 lareira_pop = Sprite("assets\\sprites\\lareira_janela.png")
 
@@ -65,18 +64,16 @@ class Jantar():
         self.memoria = Memoria(self.janela)
 
         #inicializa o minigame da alavanca
+        self.win_alavanca = False
         self.alavanca = Alavanca(self.janela)
         self.minigame_alavanca = False
-        self.timer = 0
         self.acionei = False
-        self.acertos_alavanca = -1
 
         #inicializa o input do player
         self.palpite = Palavra(self.janela)
         self.interativo = False
         self.corretas = ["radar", "ordem", "morde", "dorme", "poder", "podre", "depor"] #lista de respostas corretas
         self.acertos_txt = 0
-        
 
     def colisoes(self):
         #se apertar "e" enquanto esta proximo da tv, abre um sprite de "tela da tv"
@@ -121,13 +118,12 @@ class Jantar():
                 #reinicia o objeto palpite
                 self.palpite = Palavra(self.janela)
 
+        
+        #===================MINIGAME ALAVANCA======================
 
-        # se apertar E do lado da lareira abre o minigame da alavanca
-        # essa mecanica vai mudar para quando o jogador clicar em cima da alavanca
         if Window.keyboard.key_pressed("e") and self.player.collided(lareira):
             self.acionei = True
 
-        # aqui inicia o jogo da alavanca
         if self.acionei:
             lareira_pop.draw()
             retrato.draw()
@@ -137,15 +133,19 @@ class Jantar():
             if Window.keyboard.key_pressed("esc"):
                 self.acionei = False
         
+        # aqui inicia o jogo da alavanca
         if self.minigame_alavanca:
-            # uso um timer pra não dar vários cliques no mesmo segundo
-            self.alavanca.circunferencia()
-            
-            # se o player aperta ESC o jogo fecha e o placar reinicia
+            self.win_alavanca = self.alavanca.circunferencia()
+            # se o player aperta ESC o jogo fecha
             if Window.keyboard.key_pressed("esc"):
-                self.acertos_alavanca = 0
-                self.minigame_alavanca = False
                 self.alavanca = Alavanca(self.janela)
+                self.minigame_alavanca = False
+        
+        if self.win_alavanca:
+            # ABRE O COFRE NO ARMARIO E DESCE O LUSTRE QUE CONTEM O JOGO DA MEMORIA
+            self.win_alavanca = False
+
+        #==========================MINIGAME MEMORIA======================================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(armario):
             self.minigame_memoria = True

@@ -38,25 +38,15 @@ coordenada = {
 }
 
 ponto1 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto1.set_position(540, 490)
 ponto2 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto2.set_position(590, 490)
 ponto3 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto3.set_position(640, 490)
 ponto4 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto4.set_position(690, 490)
 ponto5 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto5.set_position(740, 490)
 ponto6 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto6.set_position(540, 520)
 ponto7 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto7.set_position(590, 520)
 ponto8 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto8.set_position(640, 520)
 ponto9 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto9.set_position(690, 520)
 ponto10 = Sprite("assets\\sprites\\circulo_apagado.png")
-ponto10.set_position(740, 520)
 
 pontos = [ponto1, ponto2, ponto3, ponto4, ponto5, ponto6, ponto7, ponto8, ponto9, ponto10]
 
@@ -84,6 +74,8 @@ class Alavanca():
 
 
     def circunferencia(self):
+        if self.turn == 10:
+            return True
         self.acerto = imagem[pos_selecionada[self.turn]]
         self.acerto.set_position(coordenada[pos_selecionada[self.turn]][0], coordenada[pos_selecionada[self.turn]][1])
         self.velocidade = velocidades[self.turn]
@@ -98,15 +90,15 @@ class Alavanca():
         self.percurso.draw()
         self.acerto.draw()
         self.objeto.draw()
+
         self.pontuacao()
         self.placar()
         
     
     def pontuacao(self):
-        print(self.acertos_alavanca)
         if self.timer >= 0.15:
-            # se o player aperta Q enquanto a bola esta em cima do lugar certo o jogo reinicia e um ponto é adicionado
-            # caso o player aperte Q e não esteja no lugar certo o jogo só reinicia
+            # se o player aperta Q enquanto a bola esta em na hitbox certa o jogo muda a velocidade e a posição da hitbox correta e um ponto é adicionado
+            # caso o player aperte Q e não esteja na hitbox certa os pontos reiniciam
             if Window.keyboard.key_pressed("q") and self.objeto.collided(self.acerto):
                 self.turn += 1
                 self.acertos_alavanca += 1
@@ -114,22 +106,23 @@ class Alavanca():
                 
             elif Window.keyboard.key_pressed("q"):
                 self.turn = 0
-                self.acertos_alavanca = 0
+                self.acertos_alavanca = -1
                 self.timer = 0
     
     def placar(self):
+        # muda os sprites dos pontos de acordo com a jogada do player
         if self.acertos_alavanca >= 0:
             pontos[self.acertos_alavanca] = Sprite("assets\\sprites\\circulo_aceso.png")
-            if self.turn < 5:
-                pontos[self.acertos_alavanca].set_position(540 + 50*(self.acertos_alavanca - 1), 490)
+            if self.turn <= 5:
+                pontos[self.acertos_alavanca].set_position(540 + 50*(self.acertos_alavanca), 490)
             else:
-                pontos[self.acertos_alavanca].set_position(540 + 50*(self.acertos_alavanca - 6), 520)
+                pontos[self.acertos_alavanca].set_position(540 + 50*(self.acertos_alavanca - 5), 520)
         else:
             for i in range(len(pontos)):
                 pontos[i] = Sprite("assets\\sprites\\circulo_apagado.png")
                 if i < 5:
-                    pontos[i].set_position(540 + 50*(i - 1), 490)
+                    pontos[i].set_position(540 + 50*i, 490)
                 else:
-                    pontos[self.i].set_position(540 + 50*(i - 6), 520)
+                    pontos[i].set_position(540 + 50*(i - 5), 520)
         for ponto in pontos:
             ponto.draw()
