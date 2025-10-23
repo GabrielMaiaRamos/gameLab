@@ -4,12 +4,14 @@ import numpy as np
 
 fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
+
+
+
 class Memoria():
-    def __init__(self, janela):
+    def __init__(self, janela, tipo):
         self.janela = janela
         self.lista_obj = []
-
-        
+        self.tipo = tipo #LUSTRE OU LIVROS
         self.stand_by = True  #verifica se clicu ou se tem que esperar o click
         self.mouse_timer = 0  #tic do mouse
 
@@ -20,29 +22,36 @@ class Memoria():
         
         #lista aleatoria de objetos que vao piscar (a ordem da lista criada ja é a ordem que o player deve seguir)
         self.lista_aleatorios = np.random.choice((0,1,2,3,4), size=5, replace=True)
-        
+        print(self.lista_aleatorios)
+
         #contagem da fase pra verificar quantos tem que piscar
         self.fase = 1
         #contagem de acertos do player (que devem ser igual ao numero da fase pra passar de fase)
-        self.acertos = 0 
+        self.acertos = 0
+        self.win_memoria = False
+        self.perdi = False
 
 
     #=====[FUNCAO QUE SEMPRE MOSTRA OS OBJETOS, BEM SIMPLES]
     def mostrar_obejtos(self):
         fundo_pop.draw()
-        for i in range(5):
-            self.lista_obj.append(Sprite("assets\\sprites\\circulo_apagado.png"))
-            self.lista_obj[i].set_position(640 + 30*i, 360)
-            self.lista_obj[i].draw()
+        if self.tipo == "lustre":
+            for i in range(5):
+                self.lista_obj.append(Sprite("assets\\sprites\\circulo_apagado.png"))
+                self.lista_obj[i].set_position(640 + 30*i, 360)
+                self.lista_obj[i].draw()
 
-            # TENTATIVA DE FAZER DESTACAR ONDE O MOUSE TA EM CIMA
-            if not self.stand_by:
-                if Window.mouse.is_over_object(self.lista_obj[i]):
-                    self.lista_obj[i] = Sprite("assets\\sprites\\circulo_is_over.png")
-                else:
-                    self.lista_obj[i] = (Sprite("assets\\sprites\\circulo_apagado.png"))
-            self.lista_obj[i].set_position(640 + 30*i, 360)
-                
+                # TENTATIVA DE FAZER DESTACAR ONDE O MOUSE TA EM CIMA
+                if not self.stand_by:
+                    if Window.mouse.is_over_object(self.lista_obj[i]):
+                        self.lista_obj[i] = Sprite("assets\\sprites\\circulo_is_over.png")
+                    else:
+                        self.lista_obj[i] = (Sprite("assets\\sprites\\circulo_apagado.png"))
+                self.lista_obj[i].set_position(640 + 30*i, 360)
+
+        elif self.tipo == "livros":
+            pass #imitar a logica dos pontos
+
         #Essa funcao mesma ja puxa outras duas sempre
         self.verifica_acerto()
         self.controle_de_ticks()
@@ -59,14 +68,20 @@ class Memoria():
                 self.acertos += 1     #aumenta o acerto atual (ou seja, a proxima verificacao desse if ja muda pro proximo indice da lista)
                 self.mouse_timer = 0
             elif not Window.mouse.is_over_object(self.lista_obj[self.lista_aleatorios[self.acertos]]) and Window.mouse.is_button_pressed(1):
-                self.fase = 1         #se clicar errado, volta pra fase 1
+                self.perdi = True  #usa la no salaJantar pra criar um novo objeto dessa classe (reiniciar tudo)
                 self.mouse_timer=0
 
+            print(self.acertos, self.acendido)
+            if self.acertos == 5:
+                self.win_memoria = True
+                
         #se eu somei acertos == ao numero da fase, posso passar de fase
         if self.acertos == self.fase:
             self.acertos=0 #zero os acertos, pois em toda a fase tem que acertar do inicio ate o ultimo a piscar
             self.fase += 1
             self.stand_by = True #ja comeca a proxima fase piscando
+
+
 
 
     #=====[LOGICA DE CONTROLE DA FUNCAO DE PISCAR AS LUZES]=====
@@ -79,6 +94,8 @@ class Memoria():
         elif self.acendido == self.fase:
             self.acendido = 0 #zero os acendidos pra poder piscar todos de novo na proxima fase
             self.stand_by=False  #agora o player deve clicar em algo, ent o momento de espera acaba
+
+
 
 
     #=====[LOGICA DE PISCAR AS LUZES]=====

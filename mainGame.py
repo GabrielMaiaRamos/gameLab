@@ -32,7 +32,7 @@ while True:
             fase = "jantar"
         case "jantar":
             sala1.desenho_jantar()
-            if not sala1.interativo and not sala1.acionei:
+            if not sala1.interativo and not sala1.pop_up_lareira:
                 move_player.moviment(sala1.objetos_jantar)
             player.draw()
             sala1.colisoes()

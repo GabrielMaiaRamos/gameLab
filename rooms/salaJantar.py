@@ -61,13 +61,14 @@ class Jantar():
         
         #inicializa o minigame da memoria
         self.minigame_memoria = False
-        self.memoria = Memoria(self.janela)
+        self.memoria = Memoria(self.janela, "lustre")
+        self.win_memoria = False
 
         #inicializa o minigame da alavanca
         self.win_alavanca = False
         self.alavanca = Alavanca(self.janela)
         self.minigame_alavanca = False
-        self.acionei = False
+        self.pop_up_lareira = False
 
         #inicializa o input do player
         self.palpite = Palavra(self.janela)
@@ -76,6 +77,10 @@ class Jantar():
         self.acertos_txt = 0
 
     def colisoes(self):
+
+
+        #===================TELA DA TELEVISAO======================
+    
         #se apertar "e" enquanto esta proximo da tv, abre um sprite de "tela da tv"
         if Window.keyboard.key_pressed("e") and self.player.collided(tv):
             self.interativo = True
@@ -119,19 +124,20 @@ class Jantar():
                 self.palpite = Palavra(self.janela)
 
         
+
         #===================MINIGAME ALAVANCA======================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(lareira):
-            self.acionei = True
+            self.pop_up_lareira = True
 
-        if self.acionei:
+        if self.pop_up_lareira:
             lareira_pop.draw()
             retrato.draw()
             
             if Window.mouse.is_over_object(retrato) and Window.mouse.is_button_pressed(1):
                 self.minigame_alavanca = True
             if Window.keyboard.key_pressed("esc"):
-                self.acionei = False
+                self.pop_up_lareira = False
         
         # aqui inicia o jogo da alavanca
         if self.minigame_alavanca:
@@ -145,6 +151,7 @@ class Jantar():
             # ABRE O COFRE NO ARMARIO E DESCE O LUSTRE QUE CONTEM O JOGO DA MEMORIA
             self.win_alavanca = False
 
+
         #==========================MINIGAME MEMORIA======================================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(armario):
@@ -152,9 +159,16 @@ class Jantar():
         
         if self.minigame_memoria:
             self.memoria.mostrar_obejtos()
-
+            if self.memoria.perdi:
+                self.memoria = Memoria(self.janela, "lustre")
             if Window.keyboard.key_pressed("esc"):
                 self.minigame_memoria = False
+        
+        if self.memoria.win_memoria:
+            #blablabla
+            print("GANHEEIII")
+            self.minigame_memoria = False
+            self.memoria.win_memoria = False
 
     def desenho_jantar(self):
         #===abaixo do player===
