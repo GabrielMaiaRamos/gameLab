@@ -3,3 +3,4 @@
 # from .salaJantar import ... (adicione quando implementar)
 
 __all__ = []
+

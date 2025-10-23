@@ -1,11 +1,14 @@
 from pplay.window import *
 from pplay.sprite import *
 from minigames.teclado_letras import Palavra
+from minigames.gameAlavanca import Alavanca
+from time import sleep
 
 fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
 #=====[SPRITES]=====
 salao_jantar = Sprite("assets\\sprites\\fundo_salao_jantar.png")
+lareira_pop = Sprite("assets\\sprites\\lareira_janela.png")
 
 quadro = Sprite("assets\\sprites\\quadro.png")
 quadro.set_position(250, 30)
@@ -56,12 +59,21 @@ class Jantar():
         self.objetos_jantar = [lareira, armario, mesa_jantar, carrinho]
         self.player = player
         self.janela = janela
-        self.interativo = False
+        
+        
+        #inicializa o minigame da alavanca
+        self.alavanca = Alavanca(self.janela)
+        self.minigame_alavanca = False
+        self.timer = 0
+        self.acionei = False
+        self.acertos_alavanca = 0
+
         #inicializa o input do player
         self.palpite = Palavra(self.janela)
-        #lista de respostas corretas
-        self.corretas = ["radar", "ordem", "morde", "dorme", "poder", "podre", "depor"]
-        self.acertos = 0
+        self.interativo = False
+        self.corretas = ["radar", "ordem", "morde", "dorme", "poder", "podre", "depor"] #lista de respostas corretas
+        self.acertos_txt = 0
+        
 
     def colisoes(self):
         #se apertar "e" enquanto esta proximo da tv, abre um sprite de "tela da tv"
@@ -92,11 +104,11 @@ class Jantar():
                         self.corretas.remove("poder")
                         self.corretas.remove("podre")
                         self.corretas.remove("depor")
-                    self.acertos += 1
+                    self.acertos_txt += 1
 
                     #muda o sprite de um circulo ao acertar
-                    circulos[self.acertos-1] = Sprite("assets\\sprites\\circulo_aceso.png")
-                    circulos[self.acertos-1].set_position(580 + ((self.acertos-1)*30), 320)
+                    circulos[self.acertos_txt-1] = Sprite("assets\\sprites\\circulo_aceso.png")
+                    circulos[self.acertos_txt-1].set_position(580 + ((self.acertos_txt-1)*30), 320)
                     
                 #reinicia o palpite para uma string vazia
                 self.palpite.palavra = ""
@@ -105,7 +117,45 @@ class Jantar():
                 self.interativo = False
                 #reinicia o objeto palpite
                 self.palpite = Palavra(self.janela)
+
+
+        # se apertar E do lado da lareira abre o minigame da alavanca
+        # essa mecanica vai mudar para quando o jogador clicar em cima da alavanca
+        if Window.keyboard.key_pressed("e") and self.player.collided(lareira):
+            self.acionei = True
         
+        # aqui inicia o jogo da alavanca
+        if self.acionei:
+            lareira_pop.draw()
+            retrato.draw()
+            
+            if Window.mouse.is_over_object(retrato) and Window.mouse.is_button_pressed(1):
+                self.minigame_alavanca = True
+            if Window.keyboard.key_pressed("esc"):
+                self.acionei = False
+        
+        if self.minigame_alavanca:
+            # uso um timer pra não dar vários cliques no mesmo segundo
+            self.timer += self.janela.delta_time()
+            self.alavanca.circunferencia()
+            if self.timer >= 0.15:
+                # se o player aperta Q enquanto a bola esta em cima do lugar certo o jogo reinicia e um ponto é adicionado
+                # caso o player aperte Q e não esteja no lugar certo o jogo só reinicia
+                if Window.keyboard.key_pressed("q") and self.alavanca.objeto.collided(self.alavanca.acerto):
+                    self.acertos_alavanca += 1
+                    self.timer = 0
+                    self.alavanca = Alavanca(self.janela)
+                    
+                elif Window.keyboard.key_pressed("q"):
+                    self.timer = 0
+                    self.alavanca = Alavanca(self.janela)
+            
+            # se o player aperta ESC o jogo fecha e o placar reinicia
+            if Window.keyboard.key_pressed("esc"):
+                self.acertos_alavanca = 0
+                self.minigame_alavanca = False
+                self.alavanca = Alavanca(self.janela)
+            
     def desenho_jantar(self):
         #===abaixo do player===
         salao_jantar.draw()

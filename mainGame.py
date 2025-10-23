@@ -25,22 +25,17 @@ move_player = Movimentacao(player, hitbox_player, janela)
 from rooms.salaJantar import Jantar
 sala1 = Jantar(janela, player)
 
-from minigames.gameAlavanca import Alavanca
-alavanca1 = Alavanca(janela, (640, 360))
-
 #=====[LOOP]=====
 while True:
     match fase:
         case "menu":
             fase = "jantar"
-            pass
         case "jantar":
             sala1.desenho_jantar()
-            if not sala1.interativo:
+            if not sala1.interativo and not sala1.acionei:
                 move_player.moviment(sala1.objetos_jantar)
             player.draw()
             sala1.colisoes()
-            alavanca1.circunferencia()
     
     #=====[update]=====
     janela.update()
