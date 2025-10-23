@@ -69,7 +69,7 @@ class Jantar():
         self.minigame_alavanca = False
         self.timer = 0
         self.acionei = False
-        self.acertos_alavanca = 0
+        self.acertos_alavanca = -1
 
         #inicializa o input do player
         self.palpite = Palavra(self.janela)
@@ -139,19 +139,7 @@ class Jantar():
         
         if self.minigame_alavanca:
             # uso um timer pra não dar vários cliques no mesmo segundo
-            self.timer += self.janela.delta_time()
             self.alavanca.circunferencia()
-            if self.timer >= 0.15:
-                # se o player aperta Q enquanto a bola esta em cima do lugar certo o jogo reinicia e um ponto é adicionado
-                # caso o player aperte Q e não esteja no lugar certo o jogo só reinicia
-                if Window.keyboard.key_pressed("q") and self.alavanca.objeto.collided(self.alavanca.acerto):
-                    self.acertos_alavanca += 1
-                    self.timer = 0
-                    self.alavanca = Alavanca(self.janela)
-                    
-                elif Window.keyboard.key_pressed("q"):
-                    self.timer = 0
-                    self.alavanca = Alavanca(self.janela)
             
             # se o player aperta ESC o jogo fecha e o placar reinicia
             if Window.keyboard.key_pressed("esc"):
@@ -163,7 +151,6 @@ class Jantar():
             self.minigame_memoria = True
         
         if self.minigame_memoria:
-            
             self.memoria.mostrar_obejtos()
 
             if Window.keyboard.key_pressed("esc"):

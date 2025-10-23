@@ -2,6 +2,7 @@ from pplay.window import *
 from pplay.sprite import *
 import numpy as np
 
+fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
 class Memoria():
     def __init__(self, janela):
@@ -28,18 +29,19 @@ class Memoria():
 
     #=====[FUNCAO QUE SEMPRE MOSTRA OS OBJETOS, BEM SIMPLES]
     def mostrar_obejtos(self):
+        fundo_pop.draw()
         for i in range(5):
             self.lista_obj.append(Sprite("assets\\sprites\\circulo_apagado.png"))
             self.lista_obj[i].set_position(640 + 30*i, 360)
             self.lista_obj[i].draw()
 
-            #TENTATIVA DE FAZER DESTACAR ONDE O MOUSE TA EM CIMA
-            # if not self.stand_by:
-            #     if Window.mouse.is_over_object(self.lista_obj[i]):
-            #         self.lista_obj[i] = Sprite("assets\\sprites\\circulo_is_over.png")
-            #     else:
-            #         self.lista_obj[i] = (Sprite("assets\\sprites\\circulo_apagado.png"))
-            # self.lista_obj[i].set_position(640 + 30*i, 360)
+            # TENTATIVA DE FAZER DESTACAR ONDE O MOUSE TA EM CIMA
+            if not self.stand_by:
+                if Window.mouse.is_over_object(self.lista_obj[i]):
+                    self.lista_obj[i] = Sprite("assets\\sprites\\circulo_is_over.png")
+                else:
+                    self.lista_obj[i] = (Sprite("assets\\sprites\\circulo_apagado.png"))
+            self.lista_obj[i].set_position(640 + 30*i, 360)
                 
         #Essa funcao mesma ja puxa outras duas sempre
         self.verifica_acerto()
@@ -49,7 +51,7 @@ class Memoria():
     def verifica_acerto(self):
         self.mouse_timer += self.janela.delta_time() #aumenta o delay do mouse
 
-        if self.mouse_timer > 1.2: #verifica se esta em um delay aceitavel
+        if self.mouse_timer > 0.5: #verifica se esta em um delay aceitavel
             #se clicar SOBRE o seguinte: lista_objetos[lista_aleatorios[acerto atual]] ou seja, pega o elemento de indice ACERTO ATUAL da lista gerada aleatoriamente
             # e envia isso como INDICE da lista de sprites (é justamente o uso que eu queria com a lista de aleatorios, a ideia é guardar indices que serao usados na lista
             # de sprtes)
@@ -63,7 +65,7 @@ class Memoria():
         #se eu somei acertos == ao numero da fase, posso passar de fase
         if self.acertos == self.fase:
             self.acertos=0 #zero os acertos, pois em toda a fase tem que acertar do inicio ate o ultimo a piscar
-            self.fase +=1
+            self.fase += 1
             self.stand_by = True #ja comeca a proxima fase piscando
 
 
@@ -81,15 +83,16 @@ class Memoria():
 
     #=====[LOGICA DE PISCAR AS LUZES]=====
     def acender_objetos(self,objeto):
-        self.timer+=1
+        self.timer += self.janela.delta_time()
+
         #SE ESTIVER ACESO E TIVER PASSADO DO TEMPO, APAGA
-        if self.on and self.timer >= 50:
+        if self.on and self.timer >= 0.25:
             self.on = False
-            self.timer=0
-            self.acendido+=1
+            self.timer = 0
+            self.acendido += 1
 
         #SE ESTIVER APAGADO E TIVER PASSADO DO TEMPO, ACENDE
-        elif not self.on and self.timer >= 50:
+        elif not self.on and self.timer >= 0.25:
             self.on = True
             self.timer = 0
 
