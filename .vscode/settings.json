@@ -1,0 +1,48 @@
+{
+    "files.exclude": {
+        //ISSO ESCONDE ESSES ARQUIVOS DA BARRA DA ESQUERDA
+        // ** SIGNIFICA QUE ELE ESCONDE EM QUALQUER PASTA, EM QUALQUER PROFUNDIDADE
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/*.pyo": true,
+        "**/*.pyd": true,
+        ".pytest_cache": true,
+        //ARQUIVOS DO GITHUB ESCONDIDOS TB
+        ".gitignore": true,
+        ".gitattributes": true,
+        //
+        //
+        //
+        //
+        //
+        "**/pplay": true
+        //
+        //
+        //
+        //
+        //
+    },
+    //EXCLUI OS ARQUIVOS DAS BUSCAS (CONTROL SHIFT F)
+    "search.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        ".pytest_cache": true
+    },
+    //MELHORA A PERFORMANCE, O EDITOR NAO FICA CHECANDO ESSES ARQUIVOS TEMPORARIOS, OU SEJA,
+    //O VS CODE PARA DE MONITORAR ESSES ARQUIVOS PRA DETECTAR MUDANÇAS
+    "files.watcherExclude": {
+        "**/__pycache__/**": true,
+        "**/*.pyc": true,
+        ".pytest_cache/**": true
+    },
+    //FILENESTING -> "ANINHAR" ARQUIVOS
+    // JUNTA OS .PYC E OS .PYO COMO "FILHOS" DOS ARQUIVOS ORIGINAIS QUE OS GERARAM 
+    // (COMO JA ESTA ESCONDENDO ELES, NA PRATICA NAO MUDA MTA COISA)
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.py": "${capture}.pyc, ${capture}.pyo"
+    },
+    //ORGANIZA OS ARQUIVOS POR TIPOS (PASTAS PRIMEIROS, ETC..)
+    "explorer.sortOrder": "type",
+    "explorer.compactFolders": true
+}

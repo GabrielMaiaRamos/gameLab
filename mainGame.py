@@ -1,6 +1,5 @@
 from pplay.window import *
 from pplay.sprite import *
-import math
 
 #=====[JANELA]=====
 largura = 1280
@@ -42,6 +41,6 @@ while True:
             player.draw()
             sala1.colisoes()
             alavanca1.circunferencia()
-            #=====[upadte]=====
-
+    
+    #=====[update]=====
     janela.update()
