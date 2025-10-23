@@ -17,6 +17,7 @@ player.set_position(largura/2 + 200, altura/2)
 hitbox_player = Sprite("sprites\\hitbox_player.png")
 hitbox_player.set_position(largura/2 + 208, altura/2 + 135)
 
+<<<<<<< Updated upstream
 #=====[sala de jantar]=====
 >>>>>>> Stashed changes
 salao_jantar = Sprite("sprites\\fundo_salao_jantar.png")
@@ -64,6 +65,20 @@ objetos_jantar = [lareira, armario, mesa_jantar]
 from playerMoviment import Movimentacao
 move_player = Movimentacao(player, hitbox_player, janela)
 
+=======
+#=====[Modularização]=====s
+from playerScripts.playerMoviment import Movimentacao
+move_player = Movimentacao(player, hitbox_player, janela)
+
+from rooms.salaJantar import Jantar
+sala1 = Jantar(janela, player)
+
+from minigames.gameAlavanca import Alavanca
+alavanca1 = Alavanca(janela, (640, 360))
+
+
+
+>>>>>>> Stashed changes
 #=====[LOOP]=====
 while True:
 <<<<<<< Updated upstream
@@ -92,6 +107,7 @@ while True:
             fase = "jantar"
             pass
         case "jantar":
+<<<<<<< Updated upstream
     #=====[draws]=====
 
             print(player.x, janela.height, player.x+100)
@@ -116,4 +132,17 @@ while True:
             #=====[upadte]=====
 >>>>>>> Stashed changes
 
+=======
+            sala1.desenho_jantar()
+            if not sala1.interativo:
+                move_player.moviment(sala1.objetos_jantar)
+
+            player.draw()
+            sala1.colisoes()
+            # janela.set_background_color((100,0,0))
+            # memoria1.mostrar_obejtos()
+            # alavanca1.circunferencia()
+        
+    #=====[update]=====
+>>>>>>> Stashed changes
     janela.update()
