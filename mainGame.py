@@ -9,13 +9,13 @@ janela = Window(largura, altura)
 fase = "menu"
 
 #=====[Sprites]=====
-player = Sprite("sprites\\player.png")
+player = Sprite("assets\\sprites\\player.png")
 player.set_position(largura/2 + 200, altura/2)
 
-quadro1 = Sprite("sprites\\quadro.png")
+quadro1 = Sprite("assets\\sprites\\quadro.png")
 quadro1.set_position(600, 200)
 
-hitbox_player = Sprite("sprites\\hitbox_player.png")
+hitbox_player = Sprite("assets\\sprites\\hitbox_player.png")
 hitbox_player.set_position(largura/2 + 208, altura/2 + 135)
 
 #=====[Modularização]=====

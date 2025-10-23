@@ -2,53 +2,53 @@ from pplay.window import *
 from pplay.sprite import *
 from minigames.teclado_letras import Palavra
 
-fundo_pop = Sprite("sprites\\fundo_pop.png")
+fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
 #=====[SPRITES]=====
-salao_jantar = Sprite("sprites\\fundo_salao_jantar.png")
+salao_jantar = Sprite("assets\\sprites\\fundo_salao_jantar.png")
 
-quadro = Sprite("sprites\\quadro.png")
+quadro = Sprite("assets\\sprites\\quadro.png")
 quadro.set_position(250, 30)
 
-lareira = Sprite("sprites\\lareira.png")
+lareira = Sprite("assets\\sprites\\lareira.png")
 lareira.set_position(0, 0)
 
-armario = Sprite("sprites\\armario.png")
+armario = Sprite("assets\\sprites\\armario.png")
 armario.set_position(1143, 75)
 
-mesa_jantar = Sprite("sprites\\mesa_jantar.png")
+mesa_jantar = Sprite("assets\\sprites\\mesa_jantar.png")
 mesa_jantar.set_position(540, 360)
 
-bussula = Sprite("sprites\\bussula.png")
+bussula = Sprite("assets\\sprites\\bussula.png")
 bussula.set_position(560, 375)
 
-tv = Sprite("sprites\\tv.png")
+tv = Sprite("assets\\sprites\\tv.png")
 tv.set_position(800, 30)
 
-tv_tela = Sprite("sprites\\tv_popup.png")
+tv_tela = Sprite("assets\\sprites\\tv_popup.png")
 tv_tela.set_position(290, 140)
 
-circulo_1 = Sprite("sprites\\circulo_apagado.png")
+circulo_1 = Sprite("assets\\sprites\\circulo_apagado.png")
 circulo_1.set_position(580, 320)
 
-circulo_2 = Sprite("sprites\\circulo_apagado.png")
+circulo_2 = Sprite("assets\\sprites\\circulo_apagado.png")
 circulo_2.set_position(610, 320)
 
-circulo_3 = Sprite("sprites\\circulo_apagado.png")
+circulo_3 = Sprite("assets\\sprites\\circulo_apagado.png")
 circulo_3.set_position(640, 320)
 
 circulos = [circulo_1, circulo_2, circulo_3]
 
-porta = Sprite("sprites\\porta.png")
+porta = Sprite("assets\\sprites\\porta.png")
 porta.set_position(540, 20)
 
-carrinho = Sprite("sprites\\carrinho.png")
+carrinho = Sprite("assets\\sprites\\carrinho.png")
 carrinho.set_position(1050, 500)
 
-retrato = Sprite("sprites\\retrato.png")
+retrato = Sprite("assets\\sprites\\retrato.png")
 retrato.set_position(160, 320)
 
-copo = Sprite("sprites\\copo.png")
+copo = Sprite("assets\\sprites\\copo.png")
 copo.set_position(1125, 505)
 
 class Jantar():
@@ -95,7 +95,7 @@ class Jantar():
                     self.acertos += 1
 
                     #muda o sprite de um circulo ao acertar
-                    circulos[self.acertos-1] = Sprite("sprites\\circulo_aceso.png")
+                    circulos[self.acertos-1] = Sprite("assets\\sprites\\circulo_aceso.png")
                     circulos[self.acertos-1].set_position(580 + ((self.acertos-1)*30), 320)
                     
                 #reinicia o palpite para uma string vazia

@@ -4,12 +4,12 @@ from math import cos, sin
 from random import choice
 import numpy as np
 
-fundo_pop = Sprite("sprites\\fundo_pop.png")
+fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
-circulo = Sprite("sprites\\roda_alavanca.png")
+circulo = Sprite("assets\\sprites\\roda_alavanca.png")
 circulo.set_position(580, 320)
 
-aro = Sprite("sprites\\aro_alavanca.png")
+aro = Sprite("assets\\sprites\\aro_alavanca.png")
 
 velocidades = np.random.choice((2,3,4,5,6), size=5, replace=True)
 print(velocidades)
@@ -21,8 +21,8 @@ class Alavanca():
         print(self.velocidade)
         self.janela = janela
         
-        self.objeto = Sprite("sprites\\roda_alavanca.png")
-        self.percurso = Sprite("sprites\\aro_alavanca.png")
+        self.objeto = Sprite("assets\\sprites\\roda_alavanca.png")
+        self.percurso = Sprite("assets\\sprites\\aro_alavanca.png")
         self.percurso.set_position(pos[0] - 100, pos[1] - 100)
         print(self.percurso.x, self.percurso.y)
         #self.objeto.set_position(640-20, 360-20+85)
