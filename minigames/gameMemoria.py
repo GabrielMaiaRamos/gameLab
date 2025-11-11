@@ -22,7 +22,6 @@ class Memoria():
         
         #lista aleatoria de objetos que vao piscar (a ordem da lista criada ja é a ordem que o player deve seguir)
         self.lista_aleatorios = np.random.choice((0,1,2,3,4), size=5, replace=True)
-        print(self.lista_aleatorios)
 
         #contagem da fase pra verificar quantos tem que piscar
         self.fase = 1
@@ -30,6 +29,8 @@ class Memoria():
         self.acertos = 0
         self.win_memoria = False
         self.perdi = False
+
+        self.win = False
 
 
     #=====[FUNCAO QUE SEMPRE MOSTRA OS OBJETOS, BEM SIMPLES]
@@ -53,7 +54,9 @@ class Memoria():
             pass #imitar a logica dos pontos
 
         #Essa funcao mesma ja puxa outras duas sempre
-        self.verifica_acerto()
+        if self.win:
+            return True
+        self.win = self.verifica_acerto()
         self.controle_de_ticks()
     
     #=====[FUNCAO DE VERIFICAR SE ACERTOU A SEQUENCIA]
@@ -71,9 +74,8 @@ class Memoria():
                 self.perdi = True  #usa la no salaJantar pra criar um novo objeto dessa classe (reiniciar tudo)
                 self.mouse_timer=0
 
-            print(self.acertos, self.acendido)
             if self.acertos == 5:
-                self.win_memoria = True
+                return True
                 
         #se eu somei acertos == ao numero da fase, posso passar de fase
         if self.acertos == self.fase:

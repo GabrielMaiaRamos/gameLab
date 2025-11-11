@@ -32,10 +32,13 @@ while True:
             fase = "jantar"
         case "jantar":
             sala1.desenho_jantar()
-            if not sala1.interativo and not sala1.pop_up_lareira:
+            if sala1.move:
                 move_player.moviment(sala1.objetos_jantar)
             player.draw()
-            sala1.colisoes()
+            if sala1.colisoes():
+                fase = "enigma1"
+        case "enigma1":
+            fase = "jantar"
     
     #=====[update]=====
     janela.update()
