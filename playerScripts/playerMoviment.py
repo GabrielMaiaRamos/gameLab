@@ -6,6 +6,7 @@ class Movimentacao():
     def __init__(self, player, hitbox, janela):
         self.speed = 170
         self.player = player
+        self.looking = 0
         self.hitbox = hitbox
         self.janela = janela
 
@@ -33,14 +34,18 @@ class Movimentacao():
 
         if (Window.keyboard.key_pressed("d") or Window.keyboard.key_pressed("RIGHT")) and (self.hitbox.x+60 < self.janela.width):
             self.hitbox.x += self.speed * self.janela.delta_time()
+            self.looking = 1
             if self.verify_colision(lista_objetos):
                 self.hitbox.x -= self.speed * self.janela.delta_time()
 
         if (Window.keyboard.key_pressed("a") or Window.keyboard.key_pressed("LEFT")) and (self.hitbox.x > 0):
             self.hitbox.x -= self.speed * self.janela.delta_time()
+            self.looking = 0
             if self.verify_colision(lista_objetos):
                 self.hitbox.x += self.speed * self.janela.delta_time()
 
         #posicao do player é igual o da hitbox com pequenas alteracoes de acordo com o sprite
-        self.player.x = self.hitbox.x - 8
-        self.player.y = self.hitbox.y - 135
+        self.player[0].x = self.hitbox.x - 8
+        self.player[0].y = self.hitbox.y - 135
+        self.player[1].x = self.hitbox.x - 8
+        self.player[1].y = self.hitbox.y - 135

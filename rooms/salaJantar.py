@@ -56,7 +56,7 @@ oculos = Sprite("assets\\sprites\\oculos.png")
 oculos.set_position(590, 660)
 
 lustre = Sprite("assets\\sprites\\lustre.png")
-lustre.set_position(350, 0)
+
 
 ordem = Sprite("assets\\sprites\\ordem.png")
 ordem.set_position(465, 185)
@@ -204,6 +204,7 @@ class Jantar():
             # DESCE O LUSTRE QUE CONTEM O JOGO DA MEMORIA
             self.cabinet_type = 1
             self.lever_type = 1
+            lustre.set_position(350, 0)
             self.objetos_jantar.append(lustre)
 
         #==========================ARMARIO POP======================================
