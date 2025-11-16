@@ -70,7 +70,6 @@ oculos.set_position(590, 660)
 
 lustre = Sprite("assets\\sprites\\lustre.png")
 
-
 ordem = Sprite("assets\\sprites\\ordem.png")
 ordem.set_position(465, 185)
 
@@ -137,6 +136,7 @@ class Jantar():
         self.lever_type = 0
         self.cabinet_type = 0
 
+        #permite o player se mover
         self.move = True
 
     def colisoes(self):
@@ -329,7 +329,6 @@ class Jantar():
         porta.draw()
         mesa_jantar.draw()
         carrinho.draw()
-        copo.draw()
         if self.win_alavanca:
             lustre.draw()
         
