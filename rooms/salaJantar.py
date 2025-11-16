@@ -10,6 +10,10 @@ door_type = 0
 fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 salao_jantar = Sprite("assets\\sprites\\fundo_salao_jantar.png")
 lareira_pop = Sprite("assets\\sprites\\lareira_janela.png")
+mesa_pop = Sprite("assets\\sprites\\mesa_pop.png")
+
+bolsa = Sprite("assets\\sprites\\bolsa.png")
+bolsa.set_position(772, 370)
 
 quadro = Sprite("assets\\sprites\\quadro.png")
 quadro.set_position(250, 30)
@@ -24,7 +28,16 @@ mesa_jantar = Sprite("assets\\sprites\\mesa_jantar.png")
 mesa_jantar.set_position(540, 360)
 
 bussula = Sprite("assets\\sprites\\bussula.png")
-bussula.set_position(560, 375)
+bussula.set_position(320, 262)
+
+bussula1 = Sprite("assets\\sprites\\bussula_1.png")
+bussula1.set_position(320, 262)
+
+bussula2 = Sprite("assets\\sprites\\bussula_2.png")
+bussula2.set_position(320, 262)
+
+bussula3 = Sprite("assets\\sprites\\bussula_3.png")
+bussula3.set_position(320, 262)
 
 tv = Sprite("assets\\sprites\\tv.png")
 tv.set_position(800, 30)
@@ -90,8 +103,15 @@ class Jantar():
         #popups
         self.pop_up_armario = False
         self.pop_up_lareira = False
+        self.pop_up_mesa = False
         self.interativo = False
         self.pop_up_quadro = False
+
+        #mudança das bússulas
+        self.bussulas = False
+        self.bussulas_list = [bussula, bussula1, bussula2, bussula3]
+        self.bussula_indice = 0
+        self.timer = 0
 
         #inicializa o minigame da memoria
         self.minigame_memoria = False
@@ -108,6 +128,9 @@ class Jantar():
         self.corretas = ["radar", "morde", "dorme", "poder", "podre", "depor"] #lista de respostas corretas
         self.acertos_txt = 0
         self.oculos = False
+
+        #minigame da bolsa
+        self.minigame_bolsa = False
 
         #estado de cada sprite
         self.frame_type = 0
@@ -262,9 +285,37 @@ class Jantar():
             if Window.keyboard.key_pressed("esc"):
                 self.move = True
                 self.memoria.win_memoria = False
-                
+        
+        #==========================MESA POP======================================
 
+        if Window.keyboard.key_pressed("e") and self.player.collided(mesa_jantar):
+            self.pop_up_mesa = True
+            self.move = False
+        
+        if self.pop_up_mesa:
+            mesa_pop.draw()
+            bolsa.draw()
+            self.bussulas_list[self.bussula_indice].draw()
+            if Window.mouse.is_over_object(bussula) and Window.mouse.is_button_pressed(1):
+                self.bussulas = True
+            
+            if self.bussulas:
+                self.timer += self.janela.delta_time()
 
+            if self.timer > 1:
+                self.bussula_indice += 1
+                self.timer = 0
+                if self.bussula_indice == 4:
+                    self.bussula_indice = 0
+                    self.bussulas = False
+
+            if Window.keyboard.key_pressed("esc"):
+                self.move = True
+                self.pop_up_mesa = False
+            
+            if Window.mouse.is_over_object(bolsa) and Window.mouse.is_button_pressed(1):
+                self.minigame_bolsa = True
+            
     def desenho_jantar(self):
         #===abaixo do player===
         porta = door[door_type]
@@ -277,7 +328,6 @@ class Jantar():
         tv.draw()
         porta.draw()
         mesa_jantar.draw()
-        bussula.draw()
         carrinho.draw()
         copo.draw()
         if self.win_alavanca:
