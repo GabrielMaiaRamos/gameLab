@@ -6,7 +6,13 @@ largura = 1280
 altura = 720
 janela = Window(largura, altura)
 #comeco da parede em -> y = 160
+fundo = Sprite("assets\\sprites\\fundo_jogo.png")
+start = Sprite("assets\\sprites\\jogar.png")
+start.set_position(280, 600)
+exit = Sprite("assets\\sprites\\sair.png")
+exit.set_position(800, 600)
 fase = "menu"
+timer = 0
 
 #=====[Sprites]=====
 looking = {
@@ -26,15 +32,19 @@ move_player = Movimentacao(looking, hitbox_player, janela)
 from rooms.salaJantar import Jantar
 sala1 = Jantar(janela, looking[0]) #passo o looking[0] (olhando pra esquerda) pq tanto faz, as duas posicoes smp sao atualizadas
 
-from rooms.salaBiblioteca import Biblioteca
-sala2 = Biblioteca(janela, looking[0])
-
 #=====[LOOP]=====
 while True:
     match fase:
         case "menu":
-            fase = "biblioteca"
+            fundo.draw()
+            start.draw()
+            exit.draw()
+            if Window.mouse.is_over_object(start) and Window.mouse.is_button_pressed(1):
+                fase = "jantar"
+            if Window.mouse.is_over_object(exit) and Window.mouse.is_button_pressed(1):
+                break
         case "jantar":
+            timer += janela.delta_time()
             sala1.desenho_jantar()
             if sala1.move:
                 move_player.moviment(sala1.objetos_jantar)
@@ -43,15 +53,9 @@ while True:
             else:
                 looking[1].draw()
             if sala1.colisoes():
-                fase = "biblioteca"
-        case "biblioteca":
-            sala2.desenho_biblioteca()
-            if sala2.move:
-                move_player.moviment(sala2.objetos_biblioteca)
-            if move_player.looking:
-                looking[0].draw()
-            else:
-                looking[1].draw()
+                fase = "win"
+        case "win":
+            pass
     
     #=====[update]=====
     janela.update()
