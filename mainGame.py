@@ -26,11 +26,14 @@ move_player = Movimentacao(looking, hitbox_player, janela)
 from rooms.salaJantar import Jantar
 sala1 = Jantar(janela, looking[0]) #passo o looking[0] (olhando pra esquerda) pq tanto faz, as duas posicoes smp sao atualizadas
 
+from rooms.salaBiblioteca import Biblioteca
+sala2 = Biblioteca(janela, looking[0])
+
 #=====[LOOP]=====
 while True:
     match fase:
         case "menu":
-            fase = "jantar"
+            fase = "biblioteca"
         case "jantar":
             sala1.desenho_jantar()
             if sala1.move:
@@ -42,7 +45,13 @@ while True:
             if sala1.colisoes():
                 fase = "biblioteca"
         case "biblioteca":
-            fase = "jantar"
+            sala2.desenho_biblioteca()
+            if sala2.move:
+                move_player.moviment(sala2.objetos_biblioteca)
+            if move_player.looking:
+                looking[0].draw()
+            else:
+                looking[1].draw()
     
     #=====[update]=====
     janela.update()

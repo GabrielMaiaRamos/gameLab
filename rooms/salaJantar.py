@@ -97,13 +97,18 @@ two.set_position(400, 195)
 three = Sprite("assets\\sprites\\crossword\\three.png")
 three.set_position(460, 295)
 
+four = Sprite("assets\\sprites\\crossword\\four.png")
+four.set_position(725, 80)
+
 door = {
     0: Sprite("assets\\sprites\\porta.png"),
     1: Sprite("assets\\sprites\\porta_win.png")
 }
 
+dica_type = "notpop"
+
 def mudaSprite(objeto):
-    global alavanca, cabinet, frame, one, two, three, carrinho_pop
+    global alavanca, cabinet, frame, one, two, three, carrinho_pop, four
     match objeto:
         case "alavanca":
             alavanca = Sprite("assets\\sprites\\alavanca_on.png")
@@ -121,6 +126,9 @@ def mudaSprite(objeto):
         case "three":
             three = Sprite("assets\\sprites\\crossword\\three_green.png")
             three.set_position(460, 295)
+        case "four":
+            four = Sprite("assets\\sprites\\crossword\\four_green.png")
+            four.set_position(725, 80)
 
 class Jantar():
     def __init__(self, janela, player):
@@ -166,20 +174,22 @@ class Jantar():
         self.acertos_txt = 0
         self.oculos = False
 
-
-
         #minigame crossword
         self.minigame_bolsa = False
         self.primeira = Palavra(self.janela)
         self.segunda = Palavra(self.janela)
         self.terceira = Palavra(self.janela)
+        self.final = Palavra(self.janela)
         self.um = False
         self.dois = False
         self.tres = False
+        self.quatro = False
+
+        #requisito para finalizar o jogo
+        self.win = False
 
     def colisoes(self):
-        global door_type
-        
+        global door_type, dica_type
 
         #===================TELEVISAO POP======================
     
@@ -227,12 +237,16 @@ class Jantar():
                 self.palpite = Palavra(self.janela)
         
         if self.acertos_txt == 3:
-           door_type = 1
+            self.win = True
+            dica_type = "mudou"
+            self.dica = True
+            door_type = 1
+            self.acertos_txt = 0
         
         porta = door[door_type]
         porta.set_position(540, 20)
 
-        if self.acertos_txt == 3 and Window.keyboard.key_pressed("e") and self.player.collided(porta):
+        if self.win and Window.keyboard.key_pressed("e") and self.player.collided(porta):
             return True
 
         #===================MINIGAME ALAVANCA======================
@@ -261,10 +275,14 @@ class Jantar():
                 self.minigame_alavanca = False
         
         if self.win_alavanca:
+            self.minigame_alavanca = False
+            dica_type = "mudou"
+            self.dica = True
             # DESCE O LUSTRE QUE CONTEM O JOGO DA MEMORIA
             mudaSprite("alavanca")
             lustre.set_position(350, 0)
             self.objetos_jantar.append(lustre)
+            self.win_alavanca = False
 
         #==========================ARMARIO POP======================================
 
@@ -278,11 +296,13 @@ class Jantar():
             
         if self.pop_up_armario:
             cabinet.draw()
-            if self.win_alavanca:
+            if lustre in self.objetos_jantar:
                 if not self.oculos:
                     oculos.draw()
                     if Window.mouse.is_over_object(oculos) and Window.mouse.is_button_pressed(1): # PERMITE QUE O PLAYER "EQUIPE" O OCULOS
                         mudaSprite("oculos")
+                        dica_type = "mudou"
+                        self.dica = True
                         self.oculos = True
 
         #==========================QUADRO POP======================================
@@ -361,9 +381,11 @@ class Jantar():
             one.draw()
             two.draw()
             three.draw()
+            four.draw()
             word = self.primeira.palavra[:5]
             word2 = self.segunda.palavra[:8]
             word3 = self.terceira.palavra[:5]
+            word4 = self.final.palavra[:5]
             for i in range(len(word)):
                 self.janela.draw_text(word[i], 515, 130 + 54*i, 50)
 
@@ -373,22 +395,33 @@ class Jantar():
             for i in range(len(word3)):
                 self.janela.draw_text(word3[i], 515 + 54*i, 294, 50)
 
-            
+            for i in range(len(word4)):
+                self.janela.draw_text(word4[i], 730, 130 + 54*i, 50)
+
             if Window.mouse.is_over_object(one) and Window.mouse.is_button_pressed(1):
                 self.um = True
                 self.dois = False
                 self.tres = False
+                self.quatro = False
 
             if Window.mouse.is_over_object(two) and Window.mouse.is_button_pressed(1):
                 self.dois = True
                 self.um = False
                 self.tres = False
+                self.quatro = False
 
             if Window.mouse.is_over_object(three) and Window.mouse.is_button_pressed(1):
                 self.tres = True
                 self.um = False
                 self.dois = False
+                self.quatro = False
             
+            if Window.mouse.is_over_object(four) and Window.mouse.is_button_pressed(1):
+                self.um = False
+                self.dois = False
+                self.tres = False
+                self.quatro = True
+
             if self.um:
                 if word == "certo":
                     mudaSprite("one")
@@ -406,6 +439,12 @@ class Jantar():
                     mudaSprite("three")
                 else:
                     self.terceira.input_letra("")
+            
+            if self.quatro:
+                if word4 == "poder":
+                    mudaSprite("four")
+                else:
+                    self.final.input_letra("")
                 
         #==========================MESA POP======================================  
 
@@ -423,7 +462,10 @@ class Jantar():
         duvida.draw()
         self.timer_dica += self.janela.delta_time()
         if Window.mouse.is_over_object(duvida) and Window.mouse.is_button_pressed(1):
-            self.hint = Hint(self.janela)
+            if self.move:
+                dica_type = "notpop"
+            else:
+                dica_type = "pop"
             if self.timer_dica >= 0.5 and not self.dica:
                 self.dica = True
             elif self.timer_dica >= 0.5:
@@ -431,7 +473,9 @@ class Jantar():
             self.timer_dica = 0
                 
         if self.dica:
-            self.hint.dica(self.move)
+            if dica_type == "mudou":
+                self.timer_dica += self.janela.delta_time()
+            self.hint.dica(dica_type)
 
     def desenho_jantar(self):
         #===abaixo do player===
@@ -446,6 +490,6 @@ class Jantar():
         porta.draw()
         mesa_jantar.draw()
         carrinho.draw()
-        if self.win_alavanca:
+        if lustre in self.objetos_jantar:
             lustre.draw()
         
