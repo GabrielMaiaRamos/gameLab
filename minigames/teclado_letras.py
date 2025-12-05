@@ -11,7 +11,7 @@ class Palavra():
         self.janela = janela
         self.timer = -0.15
 
-    def input_letra(self):
+    def input_letra(self, caso):
         self.timer += self.janela.delta_time()
         
         if self.timer >= 0.15:
@@ -98,12 +98,13 @@ class Palavra():
                 self.timer = 0
         else:
             self.letra = ""
-        self.mostrar_letra()
+        
+        self.mostrar_letra(caso)
 
-    def mostrar_letra(self):
+    def mostrar_letra(self, caso):
         if self.letra == "BACKSPACE":
             self.palavra = self.palavra[:len(self.palavra)-1]
         else:
             self.palavra += self.letra
-
-        self.janela.draw_text(self.palavra, 470, 400 , 30)
+        if caso == "palpite":
+            self.janela.draw_text(self.palavra, 470, 400 , 30)

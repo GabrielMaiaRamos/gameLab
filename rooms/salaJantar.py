@@ -11,6 +11,7 @@ fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 salao_jantar = Sprite("assets\\sprites\\fundo_salao_jantar.png")
 lareira_pop = Sprite("assets\\sprites\\lareira_janela.png")
 mesa_pop = Sprite("assets\\sprites\\mesa_pop.png")
+carrinho_pop = Sprite("assets\\sprites\\carrinho_pop1.png")
 
 bolsa = Sprite("assets\\sprites\\bolsa.png")
 bolsa.set_position(772, 370)
@@ -73,25 +74,49 @@ lustre = Sprite("assets\\sprites\\lustre.png")
 ordem = Sprite("assets\\sprites\\ordem.png")
 ordem.set_position(465, 185)
 
-lever = {
-    0: Sprite("assets\\sprites\\alavanca_off.png"),
-    1: Sprite("assets\\sprites\\alavanca_on.png")
-}
+alavanca = Sprite("assets\\sprites\\alavanca_off.png")
+alavanca.set_position(625, 590)
 
-cabinet = {
-    0: Sprite("assets\\sprites\\armario_pop.png"),
-    1: Sprite("assets\\sprites\\armario_pop_2.png"),
-}
+cabinet = Sprite("assets\\sprites\\armario_pop.png")
 
-frame = {
-    0: Sprite("assets\\sprites\\quadro_pop.png"),
-    1: Sprite("assets\\sprites\\quadro_pop_2.png")
-}
+frame = Sprite("assets\\sprites\\quadro_pop.png")
+
+crossword = Sprite("assets\\sprites\\crossword.png")
+crossword.set_position(385.5, 37.5)
+
+one = Sprite("assets\\sprites\\crossword\\one.png")
+one.set_position(505, 80)
+
+two = Sprite("assets\\sprites\\crossword\\two.png")
+two.set_position(400, 195)
+
+three = Sprite("assets\\sprites\\crossword\\three.png")
+three.set_position(460, 295)
 
 door = {
     0: Sprite("assets\\sprites\\porta.png"),
     1: Sprite("assets\\sprites\\porta_win.png")
 }
+
+def mudaSprite(objeto):
+    global alavanca, cabinet, frame, one, two, three, carrinho_pop
+    match objeto:
+        case "alavanca":
+            alavanca = Sprite("assets\\sprites\\alavanca_on.png")
+            alavanca.set_position(625, 590)
+            cabinet = Sprite("assets\\sprites\\armario_pop_2.png")
+        case "oculos":
+            frame = Sprite("assets\\sprites\\quadro_pop_2.png")
+            carrinho_pop = Sprite("assets\\sprites\\carrinho_pop2.png")
+        case "one":
+            one = Sprite("assets\\sprites\\crossword\\one_green.png")
+            one.set_position(505, 80)
+        case "two":
+            two = Sprite("assets\\sprites\\crossword\\two_green.png")
+            two.set_position(400, 195)
+        case "three":
+            three = Sprite("assets\\sprites\\crossword\\three_green.png")
+            three.set_position(460, 295)
 
 class Jantar():
     def __init__(self, janela, player):
@@ -105,6 +130,7 @@ class Jantar():
         self.pop_up_mesa = False
         self.interativo = False
         self.pop_up_quadro = False
+        self.pop_up_carrinho = False
 
         #mudança das bússulas
         self.bussulas = False
@@ -128,16 +154,17 @@ class Jantar():
         self.acertos_txt = 0
         self.oculos = False
 
-        #minigame da bolsa
-        self.minigame_bolsa = False
-
-        #estado de cada sprite
-        self.frame_type = 0
-        self.lever_type = 0
-        self.cabinet_type = 0
-
         #permite o player se mover
         self.move = True
+
+        #minigame crossword
+        self.minigame_bolsa = False
+        self.primeira = Palavra(self.janela)
+        self.segunda = Palavra(self.janela)
+        self.terceira = Palavra(self.janela)
+        self.um = False
+        self.dois = False
+        self.tres = False
 
     def colisoes(self):
         global door_type
@@ -154,7 +181,7 @@ class Jantar():
             #desenha a lista de 3 circulos
             for c in range(len(circulos)):
                 circulos[c].draw()
-            self.palpite.input_letra()
+            self.palpite.input_letra("palpite")
 
             #se der enter, verifica se a palavra formada esta na lista de corretas
             if Window.keyboard.key_pressed("enter"):
@@ -200,9 +227,6 @@ class Jantar():
         if Window.keyboard.key_pressed("e") and self.player.collided(lareira):
             self.pop_up_lareira = True
             self.move = False
-        
-        alavanca = lever[self.lever_type]
-        alavanca.set_position(625, 590)
 
         if self.pop_up_lareira:
             lareira_pop.draw()
@@ -225,8 +249,7 @@ class Jantar():
         
         if self.win_alavanca:
             # DESCE O LUSTRE QUE CONTEM O JOGO DA MEMORIA
-            self.cabinet_type = 1
-            self.lever_type = 1
+            mudaSprite("alavanca")
             lustre.set_position(350, 0)
             self.objetos_jantar.append(lustre)
 
@@ -241,12 +264,12 @@ class Jantar():
             self.pop_up_armario = False
             
         if self.pop_up_armario:
-            cabinet[self.cabinet_type].draw()
+            cabinet.draw()
             if self.win_alavanca:
                 if not self.oculos:
                     oculos.draw()
                     if Window.mouse.is_over_object(oculos) and Window.mouse.is_button_pressed(1): # PERMITE QUE O PLAYER "EQUIPE" O OCULOS
-                        self.frame_type = 1
+                        mudaSprite("oculos")
                         self.oculos = True
 
         #==========================QUADRO POP======================================
@@ -257,9 +280,8 @@ class Jantar():
         
         if self.pop_up_quadro:
             fundo_pop.draw()
-            quadro_pop = frame[self.frame_type]
-            quadro_pop.set_position(465, 10)
-            quadro_pop.draw()
+            frame.set_position(465, 10)
+            frame.draw()
 
             if Window.keyboard.key_pressed("esc"):
                 self.move = True
@@ -311,11 +333,78 @@ class Jantar():
 
             if Window.keyboard.key_pressed("esc"):
                 self.move = True
+                self.minigame_bolsa = False
                 self.pop_up_mesa = False
             
             if Window.mouse.is_over_object(bolsa) and Window.mouse.is_button_pressed(1):
                 self.minigame_bolsa = True
+        
+        #==========================MINIGAME CROSSWORDS======================================
+
+        if self.minigame_bolsa:
+            self.move = False
+            fundo_pop.draw()
+            crossword.draw()
+            one.draw()
+            two.draw()
+            three.draw()
+            word = self.primeira.palavra[:5]
+            word2 = self.segunda.palavra[:8]
+            word3 = self.terceira.palavra[:5]
+            for i in range(len(word)):
+                self.janela.draw_text(word[i], 515, 130 + 54*i, 50)
+
+            for i in range(len(word2)):
+                self.janela.draw_text(word2[i], 460 + 54*i, 184, 50)
+
+            for i in range(len(word3)):
+                self.janela.draw_text(word3[i], 515 + 54*i, 294, 50)
+
             
+            if Window.mouse.is_over_object(one) and Window.mouse.is_button_pressed(1):
+                self.um = True
+                self.dois = False
+                self.tres = False
+
+            if Window.mouse.is_over_object(two) and Window.mouse.is_button_pressed(1):
+                self.dois = True
+                self.um = False
+                self.tres = False
+
+            if Window.mouse.is_over_object(three) and Window.mouse.is_button_pressed(1):
+                self.tres = True
+                self.um = False
+                self.dois = False
+            
+            if self.um:
+                if word == "certo":
+                    mudaSprite("one")
+                else:
+                    self.primeira.input_letra("")  
+            
+            if self.dois:
+                if word2 == "perigoso":
+                    mudaSprite("two")
+                else:
+                    self.segunda.input_letra("")
+                
+            if self.tres:
+                if word3 == "toque":
+                    mudaSprite("three")
+                else:
+                    self.terceira.input_letra("")
+                
+        #==========================MESA POP======================================  
+
+        if Window.keyboard.key_pressed("e") and self.player.collided(carrinho):
+            self.pop_up_carrinho = True
+        
+        if self.pop_up_carrinho:
+            carrinho_pop.draw()
+        
+        if Window.keyboard.key_pressed("esc"):
+            self.pop_up_carrinho = False
+
     def desenho_jantar(self):
         #===abaixo do player===
         porta = door[door_type]

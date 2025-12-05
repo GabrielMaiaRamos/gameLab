@@ -16,9 +16,6 @@ looking = {
 looking[0].set_position(largura/2 + 200, altura/2)
 looking[1].set_position(largura/2 + 200, altura/2)
 
-quadro1 = Sprite("assets\\sprites\\quadro.png")
-quadro1.set_position(600, 200)
-
 hitbox_player = Sprite("assets\\sprites\\hitbox_player.png")
 hitbox_player.set_position(largura/2 + 208, altura/2 + 135)
 
