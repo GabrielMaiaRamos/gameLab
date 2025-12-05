@@ -40,8 +40,8 @@ while True:
             else:
                 looking[1].draw()
             if sala1.colisoes():
-                fase = "enigma1"
-        case "enigma1":
+                fase = "biblioteca"
+        case "biblioteca":
             fase = "jantar"
     
     #=====[update]=====

@@ -4,9 +4,6 @@ import numpy as np
 
 fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
-
-
-
 class Memoria():
     def __init__(self, janela, tipo):
         self.janela = janela

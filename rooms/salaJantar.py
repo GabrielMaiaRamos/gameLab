@@ -3,6 +3,7 @@ from pplay.sprite import *
 from minigames.teclado_letras import Palavra
 from minigames.gameAlavanca import Alavanca
 from minigames.gameMemoria import Memoria
+from playerScripts.hint import Hint
 
 door_type = 0
 
@@ -71,6 +72,9 @@ oculos.set_position(590, 660)
 
 lustre = Sprite("assets\\sprites\\lustre.png")
 
+duvida = Sprite("assets\\sprites\\duvida.png")
+duvida.set_position(1230, 0)
+
 ordem = Sprite("assets\\sprites\\ordem.png")
 ordem.set_position(465, 185)
 
@@ -132,6 +136,14 @@ class Jantar():
         self.pop_up_quadro = False
         self.pop_up_carrinho = False
 
+        #permite o player se mover
+        self.move = True
+
+        #dicas
+        self.hint = Hint(self.janela)
+        self.dica = False
+        self.timer_dica = 0
+
         #mudança das bússulas
         self.bussulas = False
         self.bussulas_list = [bussula, bussula1, bussula2, bussula3]
@@ -154,8 +166,7 @@ class Jantar():
         self.acertos_txt = 0
         self.oculos = False
 
-        #permite o player se mover
-        self.move = True
+
 
         #minigame crossword
         self.minigame_bolsa = False
@@ -168,6 +179,8 @@ class Jantar():
 
     def colisoes(self):
         global door_type
+        
+
         #===================TELEVISAO POP======================
     
         #se apertar "e" enquanto esta proximo da tv, abre um sprite de "tela da tv"
@@ -404,6 +417,21 @@ class Jantar():
         
         if Window.keyboard.key_pressed("esc"):
             self.pop_up_carrinho = False
+
+        #==========================DICAS======================================  
+        
+        duvida.draw()
+        self.timer_dica += self.janela.delta_time()
+        if Window.mouse.is_over_object(duvida) and Window.mouse.is_button_pressed(1):
+            self.hint = Hint(self.janela)
+            if self.timer_dica >= 0.5 and not self.dica:
+                self.dica = True
+            elif self.timer_dica >= 0.5:
+                self.dica = False
+            self.timer_dica = 0
+                
+        if self.dica:
+            self.hint.dica(self.move)
 
     def desenho_jantar(self):
         #===abaixo do player===
