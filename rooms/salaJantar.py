@@ -1,11 +1,21 @@
 from pplay.window import *
 from pplay.sprite import *
+from pplay.sound import *
 from minigames.teclado_letras import Palavra
 from minigames.gameAlavanca import Alavanca
 from minigames.gameMemoria import Memoria
 from playerScripts.hint import Hint
 
 door_type = 0
+
+#=====[SONS]=====
+efeito_pop_up = Sound("assets\\sounds\\efeito_pop_up_geral.ogg")
+efeito_armario = Sound("assets\\sounds\\efeito_armario.ogg")
+efeito_final = Sound("assets\\sounds\\efeito_final.ogg")
+efeito_correto = Sound("assets\\sounds\\efeito_correto.ogg")
+efeito_errado = Sound("assets\\sounds\\efeito_errado.ogg")
+efeito_submit = Sound("assets\\sounds\\efeito_submit.ogg")
+efeito_coleta = Sound("assets\\sounds\\efeito_coleta.ogg")
 
 #=====[SPRITES]=====
 fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
@@ -195,8 +205,13 @@ class Jantar():
     
         #se apertar "e" enquanto esta proximo da tv, abre um sprite de "tela da tv"
         if Window.keyboard.key_pressed("e") and self.player.collided(tv):
+            #se for a primeira vez que abre
+            if self.interativo == False:
+                efeito_pop_up.play()
             self.interativo = True
             self.move = False
+            
+            
         
         if self.interativo:
             fundo_pop.draw()
@@ -211,26 +226,33 @@ class Jantar():
                 #se estiver na lista de corretas, entao inicializa um loop para retirar as palavras correspondentes
                 if self.palpite.palavra in self.corretas:
                     if self.palpite.palavra == "radar":
+                        efeito_correto.play()
                         self.corretas.remove("radar")
 
                     elif self.palpite.palavra in ["morde", "dorme"]:
+                        efeito_correto.play()
                         self.corretas.remove("morde")
                         self.corretas.remove("dorme")
 
                     elif self.palpite.palavra in ["poder", "podre", "depor"]:
+                        efeito_correto.play()
                         self.corretas.remove("poder")
                         self.corretas.remove("podre")
                         self.corretas.remove("depor")
                     self.acertos_txt += 1
 
+                    
                     #muda o sprite de um circulo ao acertar
                     circulos[self.acertos_txt-1] = Sprite("assets\\sprites\\circulo_aceso.png")
                     circulos[self.acertos_txt-1].set_position(460 + ((self.acertos_txt-1)*30), 450)
-                    
+                else:
+                    efeito_submit.play()
+              
                 #reinicia o palpite para uma string vazia
                 self.palpite.palavra = ""
             #se apertar esc, fecha o sprite "tela da tv" e retorna à sala de jantar
-            if Window.keyboard.key_pressed("esc"):
+            if Window.keyboard.key_pressed("esc") and self.player.collided(tv):
+                efeito_pop_up.play()
                 self.move = True
                 self.interativo = False
                 #reinicia o objeto palpite
@@ -247,11 +269,13 @@ class Jantar():
         porta.set_position(540, 20)
 
         if self.win and Window.keyboard.key_pressed("e") and self.player.collided(porta):
+            efeito_final.play()
             return True
 
         #===================MINIGAME ALAVANCA======================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(lareira):
+            efeito_pop_up.play()
             self.pop_up_lareira = True
             self.move = False
 
@@ -261,7 +285,8 @@ class Jantar():
 
             if Window.mouse.is_over_object(alavanca) and Window.mouse.is_button_pressed(1) and not self.win_alavanca:
                 self.minigame_alavanca = True
-            if Window.keyboard.key_pressed("esc"):
+            if Window.keyboard.key_pressed("esc") and self.player.collided(lareira):
+                efeito_pop_up.play()
                 self.move = True
                 self.pop_up_lareira = False
         
@@ -269,7 +294,7 @@ class Jantar():
         if self.minigame_alavanca:
             self.win_alavanca = self.alavanca.circunferencia()
             # se o player aperta ESC o jogo fecha
-            if Window.keyboard.key_pressed("esc"):
+            if Window.keyboard.key_pressed("esc") and self.player.collided(lareira):
                 self.alavanca = Alavanca(self.janela)
                 self.move = True
                 self.minigame_alavanca = False
@@ -287,10 +312,12 @@ class Jantar():
         #==========================ARMARIO POP======================================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(armario):
+            efeito_armario.play()
             self.pop_up_armario = True
             self.move = False
         
-        if Window.keyboard.key_pressed("esc"):
+        if Window.keyboard.key_pressed("esc") and self.player.collided(armario):
+            efeito_armario.play()
             self.move = True
             self.pop_up_armario = False
             
@@ -300,6 +327,7 @@ class Jantar():
                 if not self.oculos:
                     oculos.draw()
                     if Window.mouse.is_over_object(oculos) and Window.mouse.is_button_pressed(1): # PERMITE QUE O PLAYER "EQUIPE" O OCULOS
+                        efeito_coleta.play()
                         mudaSprite("oculos")
                         dica_type = "mudou"
                         self.dica = True
@@ -308,6 +336,7 @@ class Jantar():
         #==========================QUADRO POP======================================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(quadro):
+            efeito_pop_up.play()
             self.pop_up_quadro = True
             self.move = False
         
@@ -316,13 +345,15 @@ class Jantar():
             frame.set_position(465, 10)
             frame.draw()
 
-            if Window.keyboard.key_pressed("esc"):
+            if Window.keyboard.key_pressed("esc") and self.player.collided(quadro):
+                efeito_pop_up.play()
                 self.move = True
                 self.pop_up_quadro = False
 
         #==========================MINIGAME MEMORIA======================================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(lustre):
+            efeito_pop_up.play()
             self.minigame_memoria = True
             self.move = False
 
@@ -330,20 +361,22 @@ class Jantar():
             self.memoria.win_memoria = self.memoria.mostrar_obejtos()
             if self.memoria.perdi:
                 self.memoria = Memoria(self.janela, "lustre")
-            if Window.keyboard.key_pressed("esc"):
+            if Window.keyboard.key_pressed("esc") and self.player.collided(lustre):
                 self.minigame_memoria = False
         
         if self.memoria.win_memoria:
             self.minigame_memoria = False
             fundo_pop.draw()
             ordem.draw()
-            if Window.keyboard.key_pressed("esc"):
+            if Window.keyboard.key_pressed("esc") and self.player.collided(lustre):
+                efeito_pop_up.play()
                 self.move = True
                 self.memoria.win_memoria = False
         
         #==========================MESA POP======================================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(mesa_jantar):
+            efeito_pop_up.play()
             self.pop_up_mesa = True
             self.move = False
         
@@ -364,12 +397,14 @@ class Jantar():
                     self.bussula_indice = 0
                     self.bussulas = False
 
-            if Window.keyboard.key_pressed("esc"):
+            if Window.keyboard.key_pressed("esc") and self.player.collided(mesa_jantar):
+                efeito_pop_up.play()
                 self.move = True
                 self.minigame_bolsa = False
                 self.pop_up_mesa = False
             
             if Window.mouse.is_over_object(bolsa) and Window.mouse.is_button_pressed(1):
+                efeito_pop_up.play()
                 self.minigame_bolsa = True
         
         #==========================MINIGAME CROSSWORDS======================================
@@ -449,12 +484,14 @@ class Jantar():
         #==========================MESA POP======================================  
 
         if Window.keyboard.key_pressed("e") and self.player.collided(carrinho):
+            efeito_pop_up.play()
             self.pop_up_carrinho = True
         
         if self.pop_up_carrinho:
             carrinho_pop.draw()
         
-        if Window.keyboard.key_pressed("esc"):
+        if Window.keyboard.key_pressed("esc") and self.player.collided(carrinho):
+            efeito_pop_up.play()
             self.pop_up_carrinho = False
 
         #==========================DICAS======================================  

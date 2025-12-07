@@ -1,5 +1,6 @@
 from pplay.window import *
 from pplay.sprite import *
+from pplay.sound import *
 
 #=====[JANELA]=====
 largura = 1280
@@ -25,6 +26,15 @@ looking[1].set_position(largura/2 + 200, altura/2)
 hitbox_player = Sprite("assets\\sprites\\hitbox_player.png")
 hitbox_player.set_position(largura/2 + 208, altura/2 + 135)
 
+#=====[Sons]=====
+musica_ambiente = Sound("assets\\sounds\\ambiente1.ogg")
+musica_ambiente.set_volume(50)
+musica_ambiente.stop()
+musica_ambiente.loop = True
+musica_ambiente.play()
+
+efeito_pop_up = Sound("assets\\sounds\\efeito_pop_up_geral.ogg")
+
 #=====[Modularização]=====
 from playerScripts.playerMoviment import Movimentacao
 move_player = Movimentacao(looking, hitbox_player, janela)
@@ -40,6 +50,7 @@ while True:
             start.draw()
             exit.draw()
             if Window.mouse.is_over_object(start) and Window.mouse.is_button_pressed(1):
+                efeito_pop_up.play()
                 fase = "jantar"
             if Window.mouse.is_over_object(exit) and Window.mouse.is_button_pressed(1):
                 break

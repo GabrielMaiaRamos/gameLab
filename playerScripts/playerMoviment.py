@@ -1,6 +1,10 @@
 from pplay.window import *
 from pplay.sprite import *
 from pplay.keyboard import *
+from pplay.sound import *
+
+#=====[Sons]=====
+efeito_passo = Sound("assets\\sounds\\efeito_passo.ogg")
 
 class Movimentacao():
     def __init__(self, player, hitbox, janela):
@@ -22,6 +26,7 @@ class Movimentacao():
     def moviment(self, lista_objetos):
         if (Window.keyboard.key_pressed("w") or Window.keyboard.key_pressed("UP")) and (self.hitbox.y > 170):
             self.hitbox.y -= self.speed * self.janela.delta_time()
+            efeito_passo.play()
             #para todas as direcoes: se verificar colisao com um objeto naquela direcao, faz a operacao inversa na posicao do y
             #assim, y do player continua = 0, sem se movimentar
             if self.verify_colision(lista_objetos):
@@ -29,17 +34,20 @@ class Movimentacao():
 
         if (Window.keyboard.key_pressed("s") or Window.keyboard.key_pressed("DOWN")) and (self.hitbox.y + 15 < self.janela.height):
             self.hitbox.y += self.speed * self.janela.delta_time()
+            efeito_passo.play()
             if self.verify_colision(lista_objetos):
                 self.hitbox.y -= self.speed * self.janela.delta_time()
 
         if (Window.keyboard.key_pressed("d") or Window.keyboard.key_pressed("RIGHT")) and (self.hitbox.x+60 < self.janela.width):
             self.hitbox.x += self.speed * self.janela.delta_time()
+            efeito_passo.play()
             self.looking = 1
             if self.verify_colision(lista_objetos):
                 self.hitbox.x -= self.speed * self.janela.delta_time()
 
         if (Window.keyboard.key_pressed("a") or Window.keyboard.key_pressed("LEFT")) and (self.hitbox.x > 0):
             self.hitbox.x -= self.speed * self.janela.delta_time()
+            efeito_passo.play()
             self.looking = 0
             if self.verify_colision(lista_objetos):
                 self.hitbox.x += self.speed * self.janela.delta_time()
@@ -48,4 +56,4 @@ class Movimentacao():
         self.player[0].x = self.hitbox.x - 8
         self.player[0].y = self.hitbox.y - 135
         self.player[1].x = self.hitbox.x - 8
-        self.player[1].y = self.hitbox.y - 135
+        self.player[1].y = self.hitbox.y - 135 

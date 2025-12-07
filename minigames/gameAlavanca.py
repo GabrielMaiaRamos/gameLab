@@ -79,6 +79,7 @@ class Alavanca():
         self.acerto = imagem[pos_selecionada[self.turn]]
         self.acerto.set_position(coordenada[pos_selecionada[self.turn]][0], coordenada[pos_selecionada[self.turn]][1])
         self.velocidade = velocidades[self.turn]
+        self.janela.draw_text("Pressione Q", 555, 200, 40, (250,250,250))
         fundo_pop.draw()
         self.timer += self.janela.delta_time()
 
