@@ -24,6 +24,13 @@ lareira_pop = Sprite("assets\\sprites\\lareira_janela.png")
 mesa_pop = Sprite("assets\\sprites\\mesa_pop.png")
 carrinho_pop = Sprite("assets\\sprites\\carrinho_pop1.png")
 
+retornar = Sprite("assets\\sprites\\return.png")
+retornar.set_position(540, 250)
+sair = Sprite("assets\\sprites\\sair.png")
+sair.set_position(540, 400)
+menu = Sprite("assets\\sprites\\pause.png")
+menu.set_position(440, 50)
+
 bolsa = Sprite("assets\\sprites\\bolsa.png")
 bolsa.set_position(772, 370)
 
@@ -61,10 +68,10 @@ circulo_1 = Sprite("assets\\sprites\\circulo_apagado.png")
 circulo_1.set_position(460, 450)
 
 circulo_2 = Sprite("assets\\sprites\\circulo_apagado.png")
-circulo_2.set_position(490, 450)
+circulo_2.set_position(500, 450)
 
 circulo_3 = Sprite("assets\\sprites\\circulo_apagado.png")
-circulo_3.set_position(520, 450)
+circulo_3.set_position(540, 450)
 
 circulos = [circulo_1, circulo_2, circulo_3]
 
@@ -153,6 +160,10 @@ class Jantar():
         self.interativo = False
         self.pop_up_quadro = False
         self.pop_up_carrinho = False
+        self.pops = False
+        self.menu = False
+        self.sair = False
+        self.timer_menu = 0
 
         #permite o player se mover
         self.move = True
@@ -201,8 +212,10 @@ class Jantar():
     def colisoes(self):
         global door_type, dica_type
 
+        
+
         #===================TELEVISAO POP======================
-    
+
         #se apertar "e" enquanto esta proximo da tv, abre um sprite de "tela da tv"
         if Window.keyboard.key_pressed("e") and self.player.collided(tv):
             #se for a primeira vez que abre
@@ -210,6 +223,7 @@ class Jantar():
                 efeito_pop_up.play()
             self.interativo = True
             self.move = False
+            self.pops = True
             
             
         
@@ -244,7 +258,7 @@ class Jantar():
                     
                     #muda o sprite de um circulo ao acertar
                     circulos[self.acertos_txt-1] = Sprite("assets\\sprites\\circulo_aceso.png")
-                    circulos[self.acertos_txt-1].set_position(460 + ((self.acertos_txt-1)*30), 450)
+                    circulos[self.acertos_txt-1].set_position(460 + ((self.acertos_txt-1)*40), 450)
                 else:
                     efeito_submit.play()
               
@@ -254,6 +268,7 @@ class Jantar():
             if Window.keyboard.key_pressed("esc") and self.player.collided(tv):
                 efeito_pop_up.play()
                 self.move = True
+                self.pops = False
                 self.interativo = False
                 #reinicia o objeto palpite
                 self.palpite = Palavra(self.janela)
@@ -275,6 +290,7 @@ class Jantar():
         #===================MINIGAME ALAVANCA======================
 
         if Window.keyboard.key_pressed("e") and self.player.collided(lareira):
+            self.pops = True
             efeito_pop_up.play()
             self.pop_up_lareira = True
             self.move = False
@@ -287,6 +303,7 @@ class Jantar():
                 self.minigame_alavanca = True
             if Window.keyboard.key_pressed("esc") and self.player.collided(lareira):
                 efeito_pop_up.play()
+                self.pops = False
                 self.move = True
                 self.pop_up_lareira = False
         
@@ -313,12 +330,14 @@ class Jantar():
 
         if Window.keyboard.key_pressed("e") and self.player.collided(armario):
             efeito_armario.play()
+            self.pops = True
             self.pop_up_armario = True
             self.move = False
         
         if Window.keyboard.key_pressed("esc") and self.player.collided(armario):
             efeito_armario.play()
             self.move = True
+            self.pops = False
             self.pop_up_armario = False
             
         if self.pop_up_armario:
@@ -339,6 +358,7 @@ class Jantar():
             efeito_pop_up.play()
             self.pop_up_quadro = True
             self.move = False
+            self.pops = True
         
         if self.pop_up_quadro:
             fundo_pop.draw()
@@ -347,6 +367,7 @@ class Jantar():
 
             if Window.keyboard.key_pressed("esc") and self.player.collided(quadro):
                 efeito_pop_up.play()
+                self.pops = False
                 self.move = True
                 self.pop_up_quadro = False
 
@@ -356,6 +377,7 @@ class Jantar():
             efeito_pop_up.play()
             self.minigame_memoria = True
             self.move = False
+            self.pops = True
 
         if self.minigame_memoria:
             self.memoria.win_memoria = self.memoria.mostrar_obejtos()
@@ -370,6 +392,7 @@ class Jantar():
             ordem.draw()
             if Window.keyboard.key_pressed("esc") and self.player.collided(lustre):
                 efeito_pop_up.play()
+                self.pops = False
                 self.move = True
                 self.memoria.win_memoria = False
         
@@ -379,6 +402,7 @@ class Jantar():
             efeito_pop_up.play()
             self.pop_up_mesa = True
             self.move = False
+            self.pops = True
         
         if self.pop_up_mesa:
             mesa_pop.draw()
@@ -399,6 +423,7 @@ class Jantar():
 
             if Window.keyboard.key_pressed("esc") and self.player.collided(mesa_jantar):
                 efeito_pop_up.play()
+                self.pops = False
                 self.move = True
                 self.minigame_bolsa = False
                 self.pop_up_mesa = False
@@ -486,17 +511,21 @@ class Jantar():
         if Window.keyboard.key_pressed("e") and self.player.collided(carrinho):
             efeito_pop_up.play()
             self.pop_up_carrinho = True
+            self.move = False
+            self.pops = True
         
         if self.pop_up_carrinho:
             carrinho_pop.draw()
         
         if Window.keyboard.key_pressed("esc") and self.player.collided(carrinho):
             efeito_pop_up.play()
+            self.pops = False
+            self.move = True
             self.pop_up_carrinho = False
 
         #==========================DICAS======================================  
         
-        duvida.draw()
+        
         self.timer_dica += self.janela.delta_time()
         if Window.mouse.is_over_object(duvida) and Window.mouse.is_button_pressed(1):
             if self.move:
@@ -513,6 +542,29 @@ class Jantar():
             if dica_type == "mudou":
                 self.timer_dica += self.janela.delta_time()
             self.hint.dica(dica_type)
+
+        duvida.draw()
+
+        if self.pops:
+            self.timer_menu = 0
+        else:
+            self.timer_menu += self.janela.delta_time()
+
+        #===================PAUSE======================
+        if self.timer_menu >= 0.2 and Window.keyboard.key_pressed("esc") and not self.pops:
+            self.menu = True
+        
+        if self.menu:
+            self.move = False
+            fundo_pop.draw()
+            menu.draw()
+            retornar.draw()
+            sair.draw()
+            if Window.mouse.is_over_object(retornar) and Window.mouse.is_button_pressed(1):
+                self.move = True
+                self.menu = False
+            if Window.mouse.is_over_object(sair) and Window.mouse.is_button_pressed(1):
+                self.sair = True
 
     def desenho_jantar(self):
         #===abaixo do player===

@@ -10,7 +10,7 @@ class Movimentacao():
     def __init__(self, player, hitbox, janela):
         self.speed = 170
         self.player = player
-        self.looking = 0
+        self.looking = 1
         self.hitbox = hitbox
         self.janela = janela
 

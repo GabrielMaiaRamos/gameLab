@@ -79,7 +79,6 @@ class Alavanca():
         self.acerto = imagem[pos_selecionada[self.turn]]
         self.acerto.set_position(coordenada[pos_selecionada[self.turn]][0], coordenada[pos_selecionada[self.turn]][1])
         self.velocidade = velocidades[self.turn]
-        self.janela.draw_text("Pressione Q", 555, 200, 40, (250,250,250))
         fundo_pop.draw()
         self.timer += self.janela.delta_time()
 
@@ -117,13 +116,13 @@ class Alavanca():
             if self.turn <= 5:
                 pontos[self.acertos_alavanca].set_position(540 + 50*(self.acertos_alavanca), 490)
             else:
-                pontos[self.acertos_alavanca].set_position(540 + 50*(self.acertos_alavanca - 5), 520)
+                pontos[self.acertos_alavanca].set_position(540 + 50*(self.acertos_alavanca - 5), 550)
         else:
             for i in range(len(pontos)):
                 pontos[i] = Sprite("assets\\sprites\\circulo_apagado.png")
                 if i < 5:
                     pontos[i].set_position(540 + 50*i, 490)
                 else:
-                    pontos[i].set_position(540 + 50*(i - 5), 520)
+                    pontos[i].set_position(540 + 50*(i - 5), 550)
         for ponto in pontos:
             ponto.draw()

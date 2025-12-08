@@ -36,7 +36,7 @@ class Memoria():
         if self.tipo == "lustre":
             for i in range(5):
                 self.lista_obj.append(Sprite("assets\\sprites\\circulo_apagado.png"))
-                self.lista_obj[i].set_position(640 + 30*i, 360)
+                self.lista_obj[i].set_position(500 + 60*i, 360)
                 self.lista_obj[i].draw()
 
                 # TENTATIVA DE FAZER DESTACAR ONDE O MOUSE TA EM CIMA
@@ -45,7 +45,7 @@ class Memoria():
                         self.lista_obj[i] = Sprite("assets\\sprites\\circulo_is_over.png")
                     else:
                         self.lista_obj[i] = (Sprite("assets\\sprites\\circulo_apagado.png"))
-                self.lista_obj[i].set_position(640 + 30*i, 360)
+                self.lista_obj[i].set_position(500 + 60*i, 360)
 
         elif self.tipo == "livros":
             pass #imitar a logica dos pontos
