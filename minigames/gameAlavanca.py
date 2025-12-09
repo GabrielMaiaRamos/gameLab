@@ -1,8 +1,7 @@
 from pplay.window import *
 from pplay.sprite import *
 from math import cos, sin
-from random import choice
-import numpy as np
+from random import choice, choices
 
 fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
@@ -11,7 +10,7 @@ circulo.set_position(580, 320)
 
 aro = Sprite("assets\\sprites\\aro_alavanca.png")
 
-velocidades = np.random.choice((6,7,8,9,10), size=10, replace=True)
+velocidades = choices([6,7,8,9,10], k=10)
 
 # dicionario com as imagens de cada posição
 imagem = {
@@ -50,7 +49,7 @@ ponto10 = Sprite("assets\\sprites\\circulo_apagado.png")
 
 pontos = [ponto1, ponto2, ponto3, ponto4, ponto5, ponto6, ponto7, ponto8, ponto9, ponto10]
 
-pos_selecionada = np.random.choice((1,2,3,4,5,6,7,8), size=10, replace=True)
+pos_selecionada = choices([1,2,3,4,5,6,7,8], k=10)
 
 class Alavanca():
     def __init__(self, janela):

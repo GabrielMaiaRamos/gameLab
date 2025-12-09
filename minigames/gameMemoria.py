@@ -1,6 +1,6 @@
 from pplay.window import *
 from pplay.sprite import *
-import numpy as np
+from random import choices
 
 fundo_pop = Sprite("assets\\sprites\\fundo_pop.png")
 
@@ -18,7 +18,7 @@ class Memoria():
         self.acendido=0
         
         #lista aleatoria de objetos que vao piscar (a ordem da lista criada ja é a ordem que o player deve seguir)
-        self.lista_aleatorios = np.random.choice((0,1,2,3,4), size=5, replace=True)
+        self.lista_aleatorios = choices([0,1,2,3,4], k=5)
 
         #contagem da fase pra verificar quantos tem que piscar
         self.fase = 1
