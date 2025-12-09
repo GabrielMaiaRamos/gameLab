@@ -13,7 +13,7 @@ start.set_position(280, 600)
 exit = Sprite("assets\\sprites\\sair.png")
 exit.set_position(800, 600)
 fim = Sprite("assets\\sprites\\fundo_fim.png")
-fase = "jantar"
+fase = "menu"
 timer = 0
 
 #=====[Sprites]=====

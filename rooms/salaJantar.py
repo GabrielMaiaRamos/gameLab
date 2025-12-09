@@ -205,6 +205,7 @@ class Jantar():
         self.dois = False
         self.tres = False
         self.quatro = False
+        self.diquinha = "cruz"
 
         #requisito para finalizar o jogo
         self.win = False
@@ -435,6 +436,10 @@ class Jantar():
         #==========================MINIGAME CROSSWORDS======================================
 
         if self.minigame_bolsa:
+            if self.diquinha == "cruz":
+                self.dica = True
+                dica_type = "cruz"
+                self.diquinha = ""
             self.move = False
             fundo_pop.draw()
             crossword.draw()

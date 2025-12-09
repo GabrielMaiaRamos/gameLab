@@ -19,6 +19,10 @@ class Hint():
         elif tela == "mudou":
             self.janela.draw_text("Algo mudou na fase! Explore", 1020, 70, 20, (255,255,255))
             self.janela.draw_text("para encontrar o que aconteceu", 1020, 100, 20, (255,255,255))
-        if tela != "mudou":
+        elif tela == "cruz":
+            self.janela.draw_text("Clique no número que quer digitar.", 1020, 70, 20, (255,255,255))
+            self.janela.draw_text("Se a resposta estiver correta o", 1020, 100, 20, (255,255,255))
+            self.janela.draw_text("numero ficará verde.", 1020, 130, 20, (255,255,255))
+        if tela != "mudou" and tela != "cruz":
             self.janela.draw_text("Pressione ESC para fechar a", 1020, 130, 20, (255,255,255))
             self.janela.draw_text("interação ou abrir o menu", 1020, 160, 20, (255,255,255))
