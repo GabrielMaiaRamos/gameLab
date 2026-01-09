@@ -187,7 +187,7 @@ class Dialogue():
                         return True
     
     def fimTexto(self):
-        self.janela.draw_text("==============PRESSIONE ESPAÇO==============", 470,670,15,(255,255,255))
+        #self.janela.draw_text("==============PRESSIONE ESPAÇO==============", 470,670,15,(255,255,255))
         if Window.keyboard.key_pressed("space"):
             self.indice = 0
             self.fala = ""
